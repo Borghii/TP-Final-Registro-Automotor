@@ -5,7 +5,7 @@
 #include "registro.h"
 
 int idVehiculoExiste(int idBuscado) {
-    FILE *archivo = fopen("registro.txt", "r");
+    FILE *archivo = fopen("automores.txt", "r");
     if (archivo == NULL) {
         return 0; // Si no existe el archivo, no hay IDs registrados aún
     }
@@ -37,7 +37,7 @@ int idVehiculoExiste(int idBuscado) {
 }
 
 void altaAutomotor() {
-    FILE *archivo = fopen("registro.txt", "a"); // modo append
+    FILE *archivo = fopen("automotores.txt", "a"); // modo append
     if (archivo == NULL) {
         printf("Error al abrir el archivo.\n");
         return;
@@ -115,7 +115,7 @@ void altaAutomotor() {
 }
 
 void listarTodos() {
-    FILE *archivo = fopen("registro.txt", "r");
+    FILE *archivo = fopen("automotores.txt", "r");
     if (archivo == NULL) {
         printf("No se pudo abrir el archivo de registros.\n");
         return;
@@ -164,7 +164,7 @@ void bajaVehiculo() {
     printf("Ingrese el ID del vehiculo que desea dar de baja: ");
     scanf("%d", &idEliminar);
 
-    FILE *original = fopen("registro.txt", "r");
+    FILE *original = fopen("automotores.txt", "r");
     FILE *temporal = fopen("temp.txt", "w");
 
     if (original == NULL || temporal == NULL) {
@@ -213,8 +213,8 @@ void bajaVehiculo() {
     fclose(temporal);
 
     // Reemplazar archivo original
-    remove("registro.txt");
-    rename("temp.txt", "registro.txt");
+    remove("automotores.txt");
+    rename("temp.txt", "automotores.txt");
 
     if (encontrado) {
         printf("Vehiculo con ID %d dado de baja exitosamente.\n", idEliminar);
