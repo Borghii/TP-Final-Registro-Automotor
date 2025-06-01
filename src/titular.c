@@ -50,7 +50,7 @@ void altaTitular() {
 
 void listarTitularesConVehiculos() {
     FILE *ft = fopen("titulares.txt", "r");
-    FILE *fa = fopen("registro.txt", "r");
+    FILE *fa = fopen("automotores.txt", "r");
     FILE *fd = fopen("domicilios.txt", "r");
 
     if (!ft || !fa || !fd) {
