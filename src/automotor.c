@@ -242,3 +242,102 @@ void listarVehiculosConID() {
 
     fclose(f);
 }
+
+
+
+
+void consultarInformacionConDominio(){
+
+    char dominio [10];
+
+    do
+    {
+        printf("Ingrese el dominio del automotor a consultar informacion: \n");
+        fgets(dominio, sizeof(dominio), stdin);
+        dominio[strcspn(dominio, "\n")] = '\0';
+
+    } while (!dominioAutomorExiste(dominio));
+
+
+    listarVehiculoConDominio(dominio);
+
+}
+
+
+int dominioAutomorExiste(const char dominio[10]) {
+    FILE *archivo = fopen("automotores.txt", "r");
+    if (archivo == NULL) {
+        return 0; // No hay archivo aún: ningún automotor registrado
+    }
+
+    Automotor temp;
+    
+    while (fscanf(archivo, "%d;%9[^;];%49[^;];%49[^;];%49[^;];%49[^;];%d;%49[^;];%49[^;];%d;%d;%d\n",
+                  &temp.idVehiculo,
+                  temp.dominio,
+                  temp.marca,
+                  temp.modelo,
+                  temp.chasis,
+                  temp.motor,
+                  &temp.anioFabricacion,
+                  temp.paisOrigen,
+                  temp.tipoUso,
+                  &temp.peso,
+                  &temp.nroDocTitular,
+                  &temp.nroRegistro) == 12)
+    {
+        if (strcmp(temp.dominio, dominio) == 0) {
+            fclose(archivo);
+            return 1; // Ya existe
+        }
+    }
+
+    fclose(archivo);
+    return 0; // No se encontró
+}
+
+void listarVehiculoConDominio(const char dominio[10]){
+
+    FILE *archivo = fopen("automotores.txt", "r");
+    if (archivo == NULL) {
+        return ; 
+    }
+
+    Automotor autoLeido;
+    
+    while (fscanf(archivo, "%d;%9[^;];%49[^;];%49[^;];%49[^;];%49[^;];%d;%49[^;];%49[^;];%d;%d;%d\n",
+                  &autoLeido.idVehiculo,
+                  autoLeido.dominio,
+                  autoLeido.marca,
+                  autoLeido.modelo,
+                  autoLeido.chasis,
+                  autoLeido.motor,
+                  &autoLeido.anioFabricacion,
+                  autoLeido.paisOrigen,
+                  autoLeido.tipoUso,
+                  &autoLeido.peso,
+                  &autoLeido.nroDocTitular,
+                  &autoLeido.nroRegistro) == 12){
+
+        if (strcmp(autoLeido.dominio, dominio) == 0) {
+            printf("\n--- Informacion del vehiculo ---\n");
+            printf("\nID Vehiculo: %d\n", autoLeido.idVehiculo);
+            printf("Dominio: %s\n", autoLeido.dominio);
+            printf("Marca: %s\n", autoLeido.marca);
+            printf("Modelo: %s\n", autoLeido.modelo);
+            printf("Chasis: %s\n", autoLeido.chasis);
+            printf("Motor: %s\n", autoLeido.motor);
+            printf("Anioo de Fabricacion: %d\n", autoLeido.anioFabricacion);
+            printf("Pais de Origen: %s\n", autoLeido.paisOrigen);
+            printf("Tipo de Uso: %s\n", autoLeido.tipoUso);
+            printf("Peso: %d kg\n", autoLeido.peso);
+            printf("DNI Titular: %d\n", autoLeido.nroDocTitular);
+            printf("Nro. de registro: %d\n", autoLeido.nroRegistro);
+        }
+    }
+
+    fclose(archivo);
+}
+
+
+
