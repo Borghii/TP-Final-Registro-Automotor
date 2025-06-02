@@ -15,15 +15,14 @@ void altaEvento(){
     // Mostrar vehiculos
     listarVehiculosConID();
 
-    // Validar ID ingresado
+     // Validar dominio ingresado
     do {
-        printf("Ingrese ID del vehiculo: ");
-        scanf("%d", &e.idVehiculo);
-        printf("Leyendo ID: %d\n", e.idVehiculo);
-        if (!idVehiculoExiste(e.idVehiculo)) {
-            printf("ID invalido. Intente de nuevo.\n");
+        printf("Ingrese DOMINIO del vehiculo: ");
+        scanf("%9s", e.dominioAutomotor);
+        if (!dominioExiste(e.dominioAutomotor)) {
+            printf("Dominio inválido. Intente de nuevo.\n");
         }
-    } while (!idVehiculoExiste(e.idVehiculo));
+    } while (!dominioExiste(e.dominioAutomotor));
     getchar(); // limpiar buffer
 
     printf("Ingrese tipo de evento (Multa, Accidente, etc): ");
@@ -50,8 +49,8 @@ void altaEvento(){
     }
     e.idEvento = ultimoID + 1;
 
-    fprintf(fe, "%d;%d;%s;%s;%s\n",
-            e.idEvento, e.idVehiculo, e.tipoEvento, e.descripcion, e.fecha);
+    fprintf(fe, "%d;%s;%s;%s;%s\n",
+            e.idEvento, e.dominioAutomotor, e.tipoEvento, e.descripcion, e.fecha);
 
     fclose(fe);
     printf("Evento registrado correctamente.\n");
@@ -66,25 +65,24 @@ void verHistorialEvento(){
         return;
     }
 
-    int idVehiculo;
-     do {
-        printf("Ingrese ID del vehiculo para ver su historial: ");
-        scanf("%d", &idVehiculo);
-        printf("Leyendo ID: %d\n", idVehiculo);
-        if (!idVehiculoExiste(idVehiculo)) {
-            printf("ID invalido. Intente de nuevo.\n");
+    char dominio[10];
+    do {
+        printf("Ingrese DOMINIO del vehiculo para ver su historial: ");
+        scanf("%9s", dominio);
+        if (!dominioExiste(dominio)) {
+            printf("Dominio inválido. Intente de nuevo.\n");
         }
-    } while (!idVehiculoExiste(idVehiculo));
+    } while (!dominioExiste(dominio));
     getchar(); // limpiar buffer
 
     HistorialEvento e;
     int encontrado = 0;
 
-    while (fscanf(fe, "%d;%d;%[^;];%[^;];%[^\n]\n",
-                  &e.idEvento, &e.idVehiculo, e.tipoEvento, e.descripcion, e.fecha) == 5) {
-        if (e.idVehiculo == idVehiculo) {
+     while (fscanf(fe, "%d;%[^;];%[^;];%[^;];%[^\n]\n",
+                  &e.idEvento, e.dominioAutomotor, e.tipoEvento, e.descripcion, e.fecha) == 5) {
+        if (strcmp(e.dominioAutomotor, dominio) == 0) {
             if (!encontrado) {
-                printf("\n--- Historial del Vehiculo ID %d ---\n", idVehiculo);
+                printf("\n--- Historial del Vehiculo Dominio %s ---\n", dominio);
                 encontrado = 1;
             }
             printf("ID Evento: %d\nTipo: %s\nDescripcion: %s\nFecha: %s\n\n",

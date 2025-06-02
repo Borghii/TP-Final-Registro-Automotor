@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "automotor.h"
 #include "registro.h"
+#include "historialevento.h"
 
 int idVehiculoExiste(int idBuscado) {
     FILE *archivo = fopen("automotores.txt", "r");
@@ -220,26 +221,28 @@ void bajaAutomotor() {
         printf("No se pudo procesar cedulas.txt (quizá no exista).\n");
     }
 
-    // 3) Eliminar ocurrencias del dominio en titulares.txt (fila completa)
-    FILE *tit = fopen("titulares.txt", "r");
-    FILE *tit_tmp = fopen("temp_titulares.txt", "w");
-    if (tit && tit_tmp) {
-        char lineaTit[512];
-        while (fgets(lineaTit, sizeof(lineaTit), tit)) {
-            if (strstr(lineaTit, dominioEliminar) == NULL) {
-                fputs(lineaTit, tit_tmp);
+    // 3) Eliminar historial de eventos asociados a ese dominio
+    FILE *hist = fopen("historial.txt", "r");
+    FILE *hist_tmp = fopen("temp_historial.txt", "w");
+    if (hist && hist_tmp) {
+        HistorialEvento he;
+        char linea[256];
+        while (fgets(linea, sizeof(linea), hist)) {
+            // Copiamos la línea si NO contiene el dominio
+            // Suponemos que el campo dominioAutomotor está al principio o bien se puede detectar con strstr
+            if (strstr(linea, dominioEliminar) == NULL) {
+                fputs(linea, hist_tmp);
             }
-            // Si la línea SÍ contiene el dominio, la skippeamos (= no la copiamos)
         }
-        fclose(tit);
-        fclose(tit_tmp);
-        remove("titulares.txt");
-        rename("temp_titulares.txt", "titulares.txt");
-        printf("Registros en titulares.txt relacionados al dominio '%s' eliminados.\n", dominioEliminar);
+        fclose(hist);
+        fclose(hist_tmp);
+        remove("historial.txt");
+        rename("temp_historial.txt", "historial.txt");
+        printf("Historial de eventos del vehículo con dominio '%s' eliminado.\n", dominioEliminar);
     } else {
-        if (tit) fclose(tit);
-        if (tit_tmp) fclose(tit_tmp);
-        printf("No se pudo procesar titulares.txt (quizá no exista).\n");
+        if (hist) fclose(hist);
+        if (hist_tmp) fclose(hist_tmp);
+        printf("No se pudo procesar historial.txt (quizá no exista).\n");
     }
 }
 
