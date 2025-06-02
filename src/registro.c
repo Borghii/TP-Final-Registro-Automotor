@@ -2,6 +2,18 @@
 #include "registro.h"
 #include "domicilio.h"
 
+int existenRegistros() {
+    FILE *fr = fopen("registros.txt", "r");
+    if (fr == NULL)
+        return 0;
+
+    int id, idDomicilio;
+    int existe = fscanf(fr, "%d;%d", &id, &idDomicilio) == 2;
+    fclose(fr);
+    return existe;
+}
+
+
 void altaRegistro() {
     FILE *fr = fopen("registros.txt", "r");
     int ultimoID = 0;
@@ -70,10 +82,10 @@ void listarRegistros() {
 
 
 int seleccionarRegistro() {
-    printf("\n Registros disponibles:");
+    printf("\n Registros disponibles: \n");
     listarRegistros();
     int idSel;
-    printf("Seleccione el ID del registro: ");
+    printf("\n Seleccione el ID del registro: ");
     scanf("%d", &idSel);
     return idSel;
 }

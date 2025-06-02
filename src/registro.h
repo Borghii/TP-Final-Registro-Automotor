@@ -8,7 +8,7 @@ typedef struct
 }Registro;
 
 
-
+int existenRegistros();
 void altaRegistro();
 void listarRegistros();
 int seleccionarRegistro();

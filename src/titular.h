@@ -13,5 +13,6 @@ typedef struct
 
 void altaTitular();
 void listarTitularesConVehiculos();
+int titularExiste(int dni);
 
 #endif

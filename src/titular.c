@@ -121,3 +121,28 @@ void listarTitularesConVehiculos() {
     fclose(fa);
     fclose(fd);
 }
+
+int titularExiste(int dni) {
+    FILE *archivo = fopen("titulares.txt", "r");
+    if (archivo == NULL) return 0;
+
+    Titular t;
+    int existe = 0;
+
+    while (fscanf(archivo, "%[^;];%d;%[^;];%d;%[^;];%d\n",
+                  t.nombre,
+                  &t.cuit,
+                  t.tipoDocumento,
+                  &t.nroDocumento,
+                  t.fechaNacimiento,
+                  &t.idDomicilio) == 6) {
+
+        if (t.nroDocumento == dni) {
+            existe = 1;
+            break;
+        }
+    }
+
+    fclose(archivo);
+    return existe;
+}
