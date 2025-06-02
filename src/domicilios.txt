@@ -1,3 +1,2 @@
-41;san nico;bsas;2900;reynoso;407
-8467;a;a;2;a;2
-6334;San Jorge;Santa Fe;2052;Carlos Gardel;1276
+41;;bsas;2900;reynoso;407
+8467;san nicolas;bsas;2900;reynoso;407

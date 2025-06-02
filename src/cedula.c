@@ -40,3 +40,4 @@ void altaCedula() {
     fclose(archivo);
     printf("Cedula guardada exitosamente.\n");
 }
+

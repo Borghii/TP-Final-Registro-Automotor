@@ -114,6 +114,135 @@ void altaAutomotor() {
     printf("Automotor guardado exitosamente.\n");
 }
 
+void bajaAutomotor() {
+    char dominioEliminar[16];  // Reserva para leer hasta 15 caracteres + '\0'
+    printf("Ingrese el DOMINIO del vehiculo que desea dar de baja: ");
+    // Usamos scanf("%15s") en lugar de fgets para evitar el problema del '\n' residual
+    scanf("%15s", dominioEliminar);
+    // Si quieres debugear, descomenta la siguiente línea:
+    // printf(">>DEBUG: dominioEliminar leído = '%s'\n", dominioEliminar);
+
+    // 1) Eliminar línea de automotores.txt
+    FILE *original = fopen("automotores.txt", "r");
+    FILE *temporal = fopen("temp.txt", "w");
+    if (!original || !temporal) {
+        printf("Error al abrir los archivos de automotores.\n");
+        if (original) fclose(original);
+        if (temporal) fclose(temporal);
+        return;
+    }
+
+    Automotor a;
+    int encontradoAuto = 0;
+    // Ajustamos los anchos de campo para que coincidan con el tamaño real en Automotor:
+    //   - dominio[10]  => usamos "%9[^;]" (hasta 9 chars + '\0')
+    //   - marca[20]    => "%19[^;]"
+    //   - modelo[20]   => "%19[^;]"
+    //   - chasis[20]   => "%19[^;]"
+    //   - motor[20]    => "%19[^;]"
+    //   - paisOrigen[50] => "%49[^;]"
+    //   - tipoUso[50]    => "%49[^;]"
+    while (fscanf(original,
+                  "%d;%9[^;];%19[^;];%19[^;];%19[^;];%19[^;];%d;%49[^;];%49[^;];%d;%d;%d\n",
+                  &a.idVehiculo,
+                  a.dominio,
+                  a.marca,
+                  a.modelo,
+                  a.chasis,
+                  a.motor,
+                  &a.anioFabricacion,
+                  a.paisOrigen,
+                  a.tipoUso,
+                  &a.peso,
+                  &a.nroDocTitular,
+                  &a.nroRegistro) == 12)
+    {
+        // Para depurar, puedes imprimir lo que lee:
+        // printf(">>DEBUG: a.dominio = '%s'\n", a.dominio);
+
+        if (strcmp(a.dominio, dominioEliminar) == 0) {
+            encontradoAuto = 1;
+            // No copiamos esta línea al temporal: quedará "eliminada"
+            continue;
+        }
+        // Copiamos todo lo demás al archivo temporal
+        fprintf(temporal,
+                "%d;%s;%s;%s;%s;%s;%d;%s;%s;%d;%d;%d\n",
+                a.idVehiculo,
+                a.dominio,
+                a.marca,
+                a.modelo,
+                a.chasis,
+                a.motor,
+                a.anioFabricacion,
+                a.paisOrigen,
+                a.tipoUso,
+                a.peso,
+                a.nroDocTitular,
+                a.nroRegistro);
+    }
+
+    fclose(original);
+    fclose(temporal);
+
+    // Reemplazamos el archivo original por el temporal
+    remove("automotores.txt");
+    rename("temp.txt", "automotores.txt");
+
+    if (encontradoAuto)
+        printf("Vehículo con dominio '%s' dado de baja en automotores.txt\n", dominioEliminar);
+    else {
+        printf("No se encontró vehículo con dominio '%s' en automotores.txt\n", dominioEliminar);
+        // Como no se encontró en automotores.txt, igual debemos terminar aquí
+        return;
+    }
+
+    // 2) Eliminar línea en cedulas.txt que contenga ese dominio
+    FILE *ced = fopen("cedulas.txt", "r");
+    FILE *ced_tmp = fopen("temp_cedulas.txt", "w");
+    if (ced && ced_tmp) {
+        char lineaCed[256];
+        while (fgets(lineaCed, sizeof(lineaCed), ced)) {
+            // Si NO encontramos el dominio dentro de la línea, la copiamos
+            if (strstr(lineaCed, dominioEliminar) == NULL) {
+                fputs(lineaCed, ced_tmp);
+            }
+            // En caso contrario, la saltamos => “la eliminamos”
+        }
+        fclose(ced);
+        fclose(ced_tmp);
+        remove("cedulas.txt");
+        rename("temp_cedulas.txt", "cedulas.txt");
+        printf("Registros en cedulas.txt relacionados al dominio '%s' eliminados.\n", dominioEliminar);
+    } else {
+        if (ced) fclose(ced);
+        if (ced_tmp) fclose(ced_tmp);
+        printf("No se pudo procesar cedulas.txt (quizá no exista).\n");
+    }
+
+    // 3) Eliminar ocurrencias del dominio en titulares.txt (fila completa)
+    FILE *tit = fopen("titulares.txt", "r");
+    FILE *tit_tmp = fopen("temp_titulares.txt", "w");
+    if (tit && tit_tmp) {
+        char lineaTit[512];
+        while (fgets(lineaTit, sizeof(lineaTit), tit)) {
+            if (strstr(lineaTit, dominioEliminar) == NULL) {
+                fputs(lineaTit, tit_tmp);
+            }
+            // Si la línea SÍ contiene el dominio, la skippeamos (= no la copiamos)
+        }
+        fclose(tit);
+        fclose(tit_tmp);
+        remove("titulares.txt");
+        rename("temp_titulares.txt", "titulares.txt");
+        printf("Registros en titulares.txt relacionados al dominio '%s' eliminados.\n", dominioEliminar);
+    } else {
+        if (tit) fclose(tit);
+        if (tit_tmp) fclose(tit_tmp);
+        printf("No se pudo procesar titulares.txt (quizá no exista).\n");
+    }
+}
+
 void listarTodos() {
     FILE *archivo = fopen("automotores.txt", "r");
     if (archivo == NULL) {
@@ -159,69 +288,6 @@ void listarTodos() {
     fclose(archivo);
 }
 
-void bajaVehiculo() {
-    int idEliminar;
-    printf("Ingrese el ID del vehiculo que desea dar de baja: ");
-    scanf("%d", &idEliminar);
-
-    FILE *original = fopen("automotores.txt", "r");
-    FILE *temporal = fopen("temp.txt", "w");
-
-    if (original == NULL || temporal == NULL) {
-        printf("Error al abrir los archivos.\n");
-        return;
-    }
-
-    Automotor a;
-    int encontrado = 0;
-
-    while (fscanf(original, "%d;%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d;%d\n",
-                  &a.idVehiculo,
-                  a.dominio,
-                  a.marca,
-                  a.modelo,
-                  a.chasis,
-                  a.motor,
-                  &a.anioFabricacion,
-                  a.paisOrigen,
-                  a.tipoUso,
-                  &a.peso,
-                  &a.nroDocTitular,
-                  &a.nroRegistro) == 12) {
-
-        if (a.idVehiculo == idEliminar) {
-            encontrado = 1;
-            continue; // No lo escribimos, lo "eliminamos"
-        }
-
-        fprintf(temporal, "%d;%s;%s;%s;%s;%s;%d;%s;%s;%d;%d;%d\n",
-                a.idVehiculo,
-                a.dominio,
-                a.marca,
-                a.modelo,
-                a.chasis,
-                a.motor,
-                a.anioFabricacion,
-                a.paisOrigen,
-                a.tipoUso,
-                a.peso,
-                a.nroDocTitular,
-                a.nroRegistro);
-    }
-
-    fclose(original);
-    fclose(temporal);
-
-    // Reemplazar archivo original
-    remove("automotores.txt");
-    rename("temp.txt", "automotores.txt");
-
-    if (encontrado) {
-        printf("Vehiculo con ID %d dado de baja exitosamente.\n", idEliminar);
-    } else {
-        printf("No se encontro un vehículo con ese ID.\n");
-    }
-}
 
 void listarVehiculosConID() {
     FILE *f = fopen("automotores.txt", "r");

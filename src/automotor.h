@@ -23,7 +23,7 @@ int idVehiculoExiste(int idBuscado);
 int dominioAutomorExiste(const char dominio[10]);
 void listarTodos();
 void listarVehiculoConDominio(const char dominio[10]);
-void bajaVehiculo();
+void bajaAutomotor();
 void listarVehiculosConID();
 void consultarInformacionConDominio();
 

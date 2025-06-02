@@ -53,7 +53,7 @@ int main() {
             //    break;
 
             case 5:
-                bajaVehiculo();
+                bajaAutomotor();
                 break;
 
             case 6:
@@ -72,9 +72,6 @@ int main() {
                 listarTitularesConVehiculos();
                 break;
 
-            //case 10:
-            //    informePorRegistro();
-            //    break;
 
             case 0:
                 printf("Saliendo del sistema...\n");
