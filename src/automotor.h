@@ -20,8 +20,11 @@ typedef struct
 
 void altaAutomotor();
 int idVehiculoExiste(int idBuscado);
+int dominioAutomorExiste(const char dominio[10]);
 void listarTodos();
+void listarVehiculoConDominio(const char dominio[10]);
 void bajaVehiculo();
 void listarVehiculosConID();
+void consultarInformacionConDominio();
 
 #endif
