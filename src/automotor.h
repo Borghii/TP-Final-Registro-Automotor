@@ -22,5 +22,6 @@ void altaAutomotor();
 int idVehiculoExiste(int idBuscado);
 void listarTodos();
 void bajaVehiculo();
+void listarVehiculosConID();
 
 #endif

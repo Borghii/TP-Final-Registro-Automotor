@@ -5,14 +5,14 @@
 #include "registro.h"
 
 int idVehiculoExiste(int idBuscado) {
-    FILE *archivo = fopen("automores.txt", "r");
+    FILE *archivo = fopen("automotores.txt", "r");
     if (archivo == NULL) {
         return 0; // Si no existe el archivo, no hay IDs registrados aún
     }
 
     Automotor temp;
 
-    while (fscanf(archivo, "%d;%[^;];%[^;];%[^;];%[^;];%[^;%d;%[^;];%[^;];%d;%d;%d\n",
+    while (fscanf(archivo, "%d;%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d;%d\n",
             &temp.idVehiculo,
             temp.dominio,
             temp.marca,
@@ -221,4 +221,24 @@ void bajaVehiculo() {
     } else {
         printf("No se encontro un vehículo con ese ID.\n");
     }
+}
+
+void listarVehiculosConID() {
+    FILE *f = fopen("automotores.txt", "r");
+    if (!f) {
+        printf("No se pudo abrir el archivo de vehiculos.\n");
+        return;
+    }
+
+    Automotor a;
+    printf("\n--- Vehiculos registrados ---\n");
+    while (fscanf(f, "%d;%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d;%d\n",
+                  &a.idVehiculo, a.dominio, a.marca, a.modelo, a.chasis, a.motor,
+                  &a.anioFabricacion, a.paisOrigen, a.tipoUso, &a.peso,
+                  &a.nroDocTitular, &a.nroRegistro) == 12) {
+        printf("ID: %d | Dominio: %s | Marca: %s | Modelo: %s | Anio: %d | Registro: %d\n",
+               a.idVehiculo, a.dominio, a.marca, a.modelo, a.anioFabricacion, a.nroRegistro);
+    }
+
+    fclose(f);
 }
