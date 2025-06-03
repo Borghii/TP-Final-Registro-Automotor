@@ -1,18 +1,26 @@
 #include <stdio.h>
 #include "historialevento.h"
-
 #include "automotor.h"
-
-
+#include "cedula.h"
+#include "domicilio.h"
+#include "titular.h"
 
 void testAutomotor();
 void testHistorialEvento();
-
+void testCedula();
+void testDomicilio();
 
 int main(){
 
     //testAutomotor();
-    testHistorialEvento();
+    
+    //testHistorialEvento();
+
+    //testCedula();
+
+    //testDomicilio();
+
+    //testTitular();
 
     return 0;
 };
@@ -20,14 +28,33 @@ int main(){
 void testAutomotor(){
     //altaAutomotor();
     //listarTodos();
-    //listarTodosFormateados();
     //consultarInformacionConDominio();
+    //bajaAutomotor();
 }
 
 
 void testHistorialEvento(){
-    //altaEvento();
-    verHistorialEvento();
+    //altaEvento(); 
+    //verHistorialEvento(); FIX: CAMBIAR IMPRESION EN UNA LINEA
+}
+
+
+void testCedula(){
+    //altaCedula();
+}
+
+void testDomicilio(){
+    //crearDomicilio();
+}
+
+void testTitular(){
+    //altaTitular();
+    //listarTitularesConVehiculos();
+}
+
+void testRegistro(){
+    //altaRegistro();
+    //listarRegistros(); //FIX: NO IMPRIME DOMICILIO
 }
 
 

@@ -222,40 +222,8 @@ void bajaAutomotor() {
 
 */
 
+
 void listarTodos() {
-    FILE *archivo = fopen("automotores.txt", "r");
-    if (archivo == NULL) {
-        printf("No se pudo abrir el archivo de registros.\n");
-        return;
-    }
-
-    Automotor autoLeido;
-
-
-    printf("\n--- LISTADO DE AUTOMOTORES ---\n");
-
-    while (leerRegistroAutomotor(archivo, &autoLeido)) {
-
-        printf("\n");
-        
-        printf("Dominio: %s\n", autoLeido.dominio);
-        printf("Marca: %s\n", autoLeido.marca);
-        printf("Modelo: %s\n", autoLeido.modelo);
-        printf("Chasis: %s\n", autoLeido.chasis);
-        printf("Motor: %s\n", autoLeido.motor);
-        printf("Anioo de Fabricacion: %d\n", autoLeido.anioFabricacion);
-        printf("Pais de Origen: %s\n", autoLeido.paisOrigen);
-        printf("Tipo de Uso: %s\n", autoLeido.tipoUso);
-        printf("Peso: %d kg\n", autoLeido.peso);
-        printf("DNI Titular: %d\n", autoLeido.nroDocTitular);
-        printf("Nro. de registro: %d\n", autoLeido.nroRegistro);
-    }
-
-    fclose(archivo);
-}
-
-
-void listarTodosFormateados() {
     FILE *f = fopen("automotores.txt", "r");
     if (!f) {
         printf("No se pudo abrir el archivo de vehiculos.\n");
