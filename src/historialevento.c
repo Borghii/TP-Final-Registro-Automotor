@@ -13,7 +13,7 @@ void altaEvento(){
     HistorialEvento e;
 
     // Mostrar vehiculos
-    listarTodosFormateados();
+    listarTodos();
 
      // Validar dominio ingresado
     do {
@@ -21,10 +21,10 @@ void altaEvento(){
         fgets(e.dominioAutomotor, sizeof(e.dominioAutomotor), stdin);
         e.dominioAutomotor[strcspn(e.dominioAutomotor, "\n")] = '\0'; 
         if (!dominioAutomotorExiste(e.dominioAutomotor)) {
-            printf("Dominio inválido. Intente de nuevo.\n");
+            printf("Dominio invalido. Intente de nuevo.\n");
         }
     } while (!dominioAutomotorExiste(e.dominioAutomotor));
-    getchar(); // limpiar buffer
+    
 
     printf("Ingrese tipo de evento (Multa, Accidente, etc): ");
     fgets(e.tipoEvento, sizeof(e.tipoEvento), stdin);

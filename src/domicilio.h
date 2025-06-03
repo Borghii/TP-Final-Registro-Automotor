@@ -11,8 +11,11 @@ typedef struct
     int numero;
 }Domicilio;
 
-int existeIdDomicilio(int idBuscado);
+
 int crearDomicilio();
+
+//Auxiliar
+int existeIdDomicilio(int idBuscado);
 
 
 #endif
