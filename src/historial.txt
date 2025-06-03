@@ -1,2 +1,3 @@
-7;ACM 1PT;Multa;Cruzo en rojo;10/03/2000
-8;ACM 3PT;Multa;Exceso de velocidad;10/05/2022
+1;ACM 3PT;Multa;Manco mal.;23/23/2023
+2;ACM 2PT;Accidente;Choco el boludo;11/11/2011
+3;ACM 3PT;Multa;No pago el medido;12/12/1212
