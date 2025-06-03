@@ -14,6 +14,7 @@ void testRegistro();
 
 int main(){
 
+    // testAutomotor();
     testAutomotor();
     
     //testHistorialEvento();
@@ -30,6 +31,8 @@ int main(){
 };
 
 void testAutomotor(){
+    // transferirVehiculo();
+
     //altaAutomotor();
     //listarTodos();
     //consultarInformacionConDominio();
@@ -60,6 +63,7 @@ void testRegistro(){
     //altaRegistro();
     //listarRegistros();
 }
+
 
 
 
