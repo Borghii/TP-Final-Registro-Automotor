@@ -43,7 +43,7 @@ void altaEvento(){
     int ultimoID = 0;
     if (fr) {
         HistorialEvento temp;
-        while (fscanf(fr, "%d;%*d;%*[^;];%*[^;];%*s\n", &temp.idEvento) == 1) {
+        while (fscanf(fr, "%d;%9[^;];%14[^;];%49[^;];%14s\n", &temp.idEvento, temp.dominioAutomotor, temp.tipoEvento, temp.descripcion, temp.fecha) == 5){
             ultimoID = temp.idEvento;
         }
         fclose(fr);
@@ -86,7 +86,7 @@ void verHistorialEvento(){
                 printf("\n--- Historial del Vehiculo Dominio %s ---\n", dominio);
                 encontrado = 1;
             }
-            printf("ID Evento: %d\nTipo: %s\nDescripcion: %s\nFecha: %s\n\n",
+            printf("ID Evento: %d  |  Tipo: %s  |  Descripcion: %s  |  Fecha: %s\n",
                    e.idEvento, e.tipoEvento, e.descripcion, e.fecha);
         }
     }

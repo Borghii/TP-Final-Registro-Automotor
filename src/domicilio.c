@@ -22,6 +22,7 @@ int existeIdDomicilio(int idBuscado) {
 
 
 int crearDomicilio() {
+    srand(time(NULL));
     FILE *archivo = fopen("domicilios.txt", "a+");
     if (!archivo) {
         printf("Error al abrir el archivo de domicilios.\n");

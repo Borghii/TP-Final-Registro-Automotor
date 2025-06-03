@@ -95,10 +95,10 @@ void listarTitularesConVehiculos() {
         rewind(fa);
         int tieneAutos = 0;
 
-        while (fscanf(fa, "%d;%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d\n",
-                      &a.idVehiculo, a.dominio, a.marca, a.modelo, a.chasis, a.motor,
+        while (fscanf(fa, "%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d\n",
+                    a.dominio, a.marca, a.modelo, a.chasis, a.motor,
                       &a.anioFabricacion, a.paisOrigen, a.tipoUso, &a.peso,
-                      &a.nroDocTitular) == 11) {
+                      &a.nroDocTitular) == 10) {
 
             if (a.nroDocTitular == t.nroDocumento) {
                 if (!tieneAutos) {

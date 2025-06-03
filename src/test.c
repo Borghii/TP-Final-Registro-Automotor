@@ -4,11 +4,13 @@
 #include "cedula.h"
 #include "domicilio.h"
 #include "titular.h"
+#include "registro.h"
 
 void testAutomotor();
 void testHistorialEvento();
 void testCedula();
 void testDomicilio();
+void testRegistro();
 
 int main(){
 
@@ -21,6 +23,8 @@ int main(){
     //testDomicilio();
 
     //testTitular();
+
+    //testRegistro();
 
     return 0;
 };
@@ -35,7 +39,7 @@ void testAutomotor(){
 
 void testHistorialEvento(){
     //altaEvento(); 
-    //verHistorialEvento(); FIX: CAMBIAR IMPRESION EN UNA LINEA
+    //verHistorialEvento();
 }
 
 
@@ -54,7 +58,7 @@ void testTitular(){
 
 void testRegistro(){
     //altaRegistro();
-    //listarRegistros(); //FIX: NO IMPRIME DOMICILIO
+    //listarRegistros();
 }
 
 

@@ -1,2 +1,6 @@
-41;;bsas;2900;reynoso;407
-8467;san nicolas;bsas;2900;reynoso;407
+6663;Rosario;Santa Fe;2000;Paraguay;233
+6719;San Jorge;Santa Fe;2451;Carlos Gardel;1276
+6784;Rojas;Buenos Aires;5555;Rivadavia;888
+6856;Baigorria;Santa Fe;4421;Salta;2451
+6944;Sastre;Santa Fe;1999;Stanley;1913
+7078;El trebol;Santa Fe;159;Pte Peron;2023
