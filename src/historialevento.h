@@ -3,11 +3,12 @@
 
 typedef struct {
     int idEvento;
-    int idVehiculo;
-    char tipoEvento [15];
-    char descripcion [50];
+    char dominioAutomotor[10];  // FK: dominio del automotor
+    char tipoEvento[15];
+    char descripcion[50];
     char fecha[15];
 } HistorialEvento;
+
 
 void altaEvento();
 void verHistorialEvento();

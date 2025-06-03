@@ -10,7 +10,7 @@ typedef struct
     char fechaNacimiento [20]; //Se puede usar DATE
     int idDomicilio; //[FK] Domicilio
 }Titular;
-
+    
 void altaTitular();
 void listarTitularesConVehiculos();
 int titularExiste(int dni);
