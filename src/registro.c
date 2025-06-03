@@ -85,6 +85,7 @@ int seleccionarRegistro() {
     printf("\n Registros disponibles: \n");
     listarRegistros();
     int idSel;
+    getchar(); // Limpiar el buffer de entrada
     printf("\n Seleccione el ID del registro: ");
     scanf("%d", &idSel);
     return idSel;

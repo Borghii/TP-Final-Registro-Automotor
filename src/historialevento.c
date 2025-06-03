@@ -13,16 +13,17 @@ void altaEvento(){
     HistorialEvento e;
 
     // Mostrar vehiculos
-    listarVehiculosConID();
+    listarTodosFormateados();
 
      // Validar dominio ingresado
     do {
         printf("Ingrese DOMINIO del vehiculo: ");
-        scanf("%9s", e.dominioAutomotor);
-        if (!dominioExiste(e.dominioAutomotor)) {
+        fgets(e.dominioAutomotor, sizeof(e.dominioAutomotor), stdin);
+        e.dominioAutomotor[strcspn(e.dominioAutomotor, "\n")] = '\0'; 
+        if (!dominioAutomotorExiste(e.dominioAutomotor)) {
             printf("Dominio inválido. Intente de nuevo.\n");
         }
-    } while (!dominioExiste(e.dominioAutomotor));
+    } while (!dominioAutomotorExiste(e.dominioAutomotor));
     getchar(); // limpiar buffer
 
     printf("Ingrese tipo de evento (Multa, Accidente, etc): ");
@@ -67,14 +68,14 @@ void verHistorialEvento(){
 
     char dominio[10];
     do {
-        printf("Ingrese DOMINIO del vehiculo para ver su historial: ");
-        scanf("%9s", dominio);
-        if (!dominioExiste(dominio)) {
-            printf("Dominio inválido. Intente de nuevo.\n");
+        printf("Ingrese el DOMINIO del vehiculo para ver su historial: ");
+        fgets(dominio, sizeof(dominio), stdin);
+        dominio[strcspn(dominio, "\n")] = '\0';
+        if (!dominioAutomotorExiste(dominio)) {
+            printf("Dominio invalido. Intente de nuevo.\n");
         }
-    } while (!dominioExiste(dominio));
-    getchar(); // limpiar buffer
-
+    } while (!dominioAutomotorExiste(dominio));
+    
     HistorialEvento e;
     int encontrado = 0;
 
