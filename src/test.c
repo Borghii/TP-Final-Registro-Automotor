@@ -3,23 +3,32 @@
 
 #include "automotor.h"
 
-void testConsultarinformacionVehiculo();
-void testAltaHistorialEvento();
+
+
+void testAutomotor();
+void testHistorialEvento();
+
 
 int main(){
 
-    testConsultarinformacionVehiculo();
-    
+    //testAutomotor();
+    testHistorialEvento();
+
     return 0;
+};
+
+void testAutomotor(){
+    //altaAutomotor();
+    //listarTodos();
+    //listarTodosFormateados();
+    //consultarInformacionConDominio();
 }
 
 
-void testConsultarinformacionVehiculo(){
-    consultarInformacionConDominio();
-}
-
-void testAltaHistorialEvento(){
-    altaEvento();
+void testHistorialEvento(){
+    //altaEvento();
     verHistorialEvento();
 }
+
+
 

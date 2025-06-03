@@ -5,37 +5,6 @@
 #include "registro.h"
 #include "historialevento.h"
 
-int idVehiculoExiste(int idBuscado) {
-    FILE *archivo = fopen("automotores.txt", "r");
-    if (archivo == NULL) {
-        return 0; // Si no existe el archivo, no hay IDs registrados aún
-    }
-
-    Automotor temp;
-
-    while (fscanf(archivo, "%d;%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d;%d\n",
-            &temp.idVehiculo,
-            temp.dominio,
-            temp.marca,
-            temp.modelo,
-            temp.chasis,
-            temp.motor,
-            &temp.anioFabricacion,
-            temp.paisOrigen,
-            temp.tipoUso,
-            &temp.peso,
-            &temp.nroDocTitular,
-            &temp.nroRegistro) == 12)
-    {
-        if (temp.idVehiculo == idBuscado) {
-            fclose(archivo);
-            return 1; // Ya existe
-        }
-    }
-
-    fclose(archivo);
-    return 0; // No existe
-}
 
 void altaAutomotor() {
     FILE *archivo = fopen("automotores.txt", "a"); // modo append
@@ -46,16 +15,21 @@ void altaAutomotor() {
 
     Automotor autoNuevo;
 
-    do {        
-        autoNuevo.idVehiculo = rand() % 10000; // Ejemplo: ID aleatorio entre 0 y 9999
-    } while (idVehiculoExiste(autoNuevo.idVehiculo));
 
+    do{
+       
 
-    getchar();
+        printf("Ingrese dominio: ");
+        fgets(autoNuevo.dominio, sizeof(autoNuevo.dominio), stdin);
+        autoNuevo.dominio[strcspn(autoNuevo.dominio, "\n")] = '\0';
 
-    printf("Ingrese dominio: ");
-    fgets(autoNuevo.dominio, sizeof(autoNuevo.dominio), stdin);
-    autoNuevo.dominio[strcspn(autoNuevo.dominio, "\n")] = '\0';
+        if (dominioAutomotorExiste(autoNuevo.dominio))
+        {
+            printf("El dominio ya existe. Ingrese un dominio diferente.\n");
+        }
+
+    } while (dominioAutomotorExiste(autoNuevo.dominio));
+
 
     printf("Ingrese marca: ");
     fgets(autoNuevo.marca, sizeof(autoNuevo.marca), stdin);
@@ -96,8 +70,7 @@ void altaAutomotor() {
     autoNuevo.nroRegistro = seleccionarRegistro();
 
     // Escribir en el archivo (formato de texto plano)
-    fprintf(archivo, "%d;%s;%s;%s;%s;%s;%d;%s;%s;%d;%d;%d\n",
-        autoNuevo.idVehiculo,
+    fprintf(archivo, "%s;%s;%s;%s;%s;%d;%s;%s;%d;%d;%d\n",
         autoNuevo.dominio,
         autoNuevo.marca,
         autoNuevo.modelo,
@@ -115,6 +88,7 @@ void altaAutomotor() {
     printf("Automotor guardado exitosamente.\n");
 }
 
+/*
 void bajaAutomotor() {
     char dominioEliminar[16];  // Reserva para leer hasta 15 caracteres + '\0'
     printf("Ingrese el DOMINIO del vehiculo que desea dar de baja: ");
@@ -246,6 +220,8 @@ void bajaAutomotor() {
     }
 }
 
+*/
+
 void listarTodos() {
     FILE *archivo = fopen("automotores.txt", "r");
     if (archivo == NULL) {
@@ -254,27 +230,14 @@ void listarTodos() {
     }
 
     Automotor autoLeido;
-    char linea[256];
+
 
     printf("\n--- LISTADO DE AUTOMOTORES ---\n");
 
-    while (fgets(linea, sizeof(linea), archivo)) {
-        sscanf(linea, "%d;%9[^;];%19[^;];%19[^;];%19[^;];%19[^;];%d;%19[^;];%14[^;];%d;%d;%d",
-            &autoLeido.idVehiculo,
-            autoLeido.dominio,
-            autoLeido.marca,
-            autoLeido.modelo,
-            autoLeido.chasis,
-            autoLeido.motor,
-            &autoLeido.anioFabricacion,
-            autoLeido.paisOrigen,
-            autoLeido.tipoUso,
-            &autoLeido.peso,
-            &autoLeido.nroDocTitular,
-            &autoLeido.nroRegistro
-        );
+    while (leerRegistroAutomotor(archivo, &autoLeido)) {
 
-        printf("\nID Vehiculo: %d\n", autoLeido.idVehiculo);
+        printf("\n");
+        
         printf("Dominio: %s\n", autoLeido.dominio);
         printf("Marca: %s\n", autoLeido.marca);
         printf("Modelo: %s\n", autoLeido.modelo);
@@ -292,7 +255,7 @@ void listarTodos() {
 }
 
 
-void listarVehiculosConID() {
+void listarTodosFormateados() {
     FILE *f = fopen("automotores.txt", "r");
     if (!f) {
         printf("No se pudo abrir el archivo de vehiculos.\n");
@@ -301,12 +264,9 @@ void listarVehiculosConID() {
 
     Automotor a;
     printf("\n--- Vehiculos registrados ---\n");
-    while (fscanf(f, "%d;%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d;%d\n",
-                  &a.idVehiculo, a.dominio, a.marca, a.modelo, a.chasis, a.motor,
-                  &a.anioFabricacion, a.paisOrigen, a.tipoUso, &a.peso,
-                  &a.nroDocTitular, &a.nroRegistro) == 12) {
-        printf("ID: %d | Dominio: %s | Marca: %s | Modelo: %s | Anio: %d | Registro: %d\n",
-               a.idVehiculo, a.dominio, a.marca, a.modelo, a.anioFabricacion, a.nroRegistro);
+    while (leerRegistroAutomotor(f,&a)) {
+        printf("Dominio: %s | Marca: %s | Modelo: %s | Anio: %d | Registro: %d\n",
+               a.dominio, a.marca, a.modelo, a.anioFabricacion, a.nroRegistro);
     }
 
     fclose(f);
@@ -325,7 +285,7 @@ void consultarInformacionConDominio(){
         fgets(dominio, sizeof(dominio), stdin);
         dominio[strcspn(dominio, "\n")] = '\0';
 
-    } while (!dominioAutomorExiste(dominio));
+    } while (!dominioAutomotorExiste(dominio));
 
 
     listarVehiculoConDominio(dominio);
@@ -333,7 +293,7 @@ void consultarInformacionConDominio(){
 }
 
 
-int dominioAutomorExiste(const char dominio[10]) {
+int dominioAutomotorExiste(const char dominio[10]) {
     FILE *archivo = fopen("automotores.txt", "r");
     if (archivo == NULL) {
         return 0; // No hay archivo aún: ningún automotor registrado
@@ -341,19 +301,7 @@ int dominioAutomorExiste(const char dominio[10]) {
 
     Automotor temp;
     
-    while (fscanf(archivo, "%d;%9[^;];%49[^;];%49[^;];%49[^;];%49[^;];%d;%49[^;];%49[^;];%d;%d;%d\n",
-                  &temp.idVehiculo,
-                  temp.dominio,
-                  temp.marca,
-                  temp.modelo,
-                  temp.chasis,
-                  temp.motor,
-                  &temp.anioFabricacion,
-                  temp.paisOrigen,
-                  temp.tipoUso,
-                  &temp.peso,
-                  &temp.nroDocTitular,
-                  &temp.nroRegistro) == 12)
+    while (leerRegistroAutomotor(archivo, &temp))
     {
         if (strcmp(temp.dominio, dominio) == 0) {
             fclose(archivo);
@@ -365,6 +313,25 @@ int dominioAutomorExiste(const char dominio[10]) {
     return 0; // No se encontró
 }
 
+
+// Función que lee un registro del archivo
+int leerRegistroAutomotor(FILE *archivo, Automotor *automotor) {
+    return fscanf(archivo, "%9[^;];%49[^;];%49[^;];%49[^;];%49[^;];%d;%49[^;];%49[^;];%d;%d;%d\n",
+                  automotor->dominio,
+                  automotor->marca,
+                  automotor->modelo,
+                  automotor->chasis,
+                  automotor->motor,
+                  &automotor->anioFabricacion,
+                  automotor->paisOrigen,
+                  automotor->tipoUso,
+                  &automotor->peso,
+                  &automotor->nroDocTitular,
+                  &automotor->nroRegistro) == 11; // Retorna 1 si leyó correctamente, 0 si no
+}
+
+
+
 void listarVehiculoConDominio(const char dominio[10]){
 
     FILE *archivo = fopen("automotores.txt", "r");
@@ -374,23 +341,10 @@ void listarVehiculoConDominio(const char dominio[10]){
 
     Automotor autoLeido;
     
-    while (fscanf(archivo, "%d;%9[^;];%49[^;];%49[^;];%49[^;];%49[^;];%d;%49[^;];%49[^;];%d;%d;%d\n",
-                  &autoLeido.idVehiculo,
-                  autoLeido.dominio,
-                  autoLeido.marca,
-                  autoLeido.modelo,
-                  autoLeido.chasis,
-                  autoLeido.motor,
-                  &autoLeido.anioFabricacion,
-                  autoLeido.paisOrigen,
-                  autoLeido.tipoUso,
-                  &autoLeido.peso,
-                  &autoLeido.nroDocTitular,
-                  &autoLeido.nroRegistro) == 12){
+    while (leerRegistroAutomotor(archivo, &autoLeido)){
 
         if (strcmp(autoLeido.dominio, dominio) == 0) {
             printf("\n--- Informacion del vehiculo ---\n");
-            printf("\nID Vehiculo: %d\n", autoLeido.idVehiculo);
             printf("Dominio: %s\n", autoLeido.dominio);
             printf("Marca: %s\n", autoLeido.marca);
             printf("Modelo: %s\n", autoLeido.modelo);
