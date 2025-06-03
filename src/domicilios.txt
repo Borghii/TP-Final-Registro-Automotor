@@ -4,3 +4,4 @@
 6856;Baigorria;Santa Fe;4421;Salta;2451
 6944;Sastre;Santa Fe;1999;Stanley;1913
 7078;El trebol;Santa Fe;159;Pte Peron;2023
+8258;ros;santa fe;2000;acme;2

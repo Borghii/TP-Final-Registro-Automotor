@@ -3,7 +3,11 @@
 #include <stdlib.h>
 #include "automotor.h"
 #include "registro.h"
+#include "cedula.h"
+#include "titular.h"
 #include "historialevento.h"
+#include <time.h>
+
 
 
 void altaAutomotor() {
@@ -328,6 +332,106 @@ void listarVehiculoConDominio(const char dominio[10]){
     }
 
     fclose(archivo);
+}
+
+void transferirVehiculo() {
+    char dominio[12];
+    int nuevoDNI;
+
+    printf("Ingrese dominio del automotor a transferir: ");
+
+        fgets(dominio, sizeof(dominio), stdin);
+        dominio[strcspn(dominio, "\n")] = '\0';
+    if (!dominioAutomotorExiste(dominio)) {
+        printf("El dominio ingresado no existe.\n");
+        return;
+    }
+
+    printf("Ingrese DNI del nuevo titular: ");
+    scanf("%d", &nuevoDNI);
+
+    if (!titularExiste(nuevoDNI)) {
+        printf("No existe un titular con ese DNI. Debe darlo de alta primero.\n");
+        altaTitular();
+    }
+
+    // Actualizar el titular del automotor
+    FILE *fa = fopen("automotores.txt", "r");
+    FILE *temp = fopen("temp_auto.txt", "w");
+    if (!fa || !temp) {
+        printf("Error al acceder a los archivos de automotores.\n");
+        return;
+    }
+
+    Automotor a;
+    int modificado = 0;
+    while (leerRegistroAutomotor(fa, &a)) {
+        if (strcmp(a.dominio, dominio) == 0) {
+            a.nroDocTitular = nuevoDNI;
+            modificado = 1;
+        }
+        fprintf(temp, "%s;%s;%s;%s;%s;%d;%s;%s;%d;%d;%d\n",
+                a.dominio, a.marca, a.modelo, a.chasis, a.motor,
+                a.anioFabricacion, a.paisOrigen, a.tipoUso,
+                a.peso, a.nroDocTitular, a.nroRegistro);
+    }
+
+    fclose(fa);
+    fclose(temp);
+    remove("automotores.txt");
+    rename("temp_auto.txt", "automotores.txt");
+
+    if (modificado) {
+        printf("Transferencia realizada correctamente.\n");
+    } else {
+        printf("Error: no se modificó el titular del automotor.\n");
+        return;
+    }
+
+    // Eliminar cédulas viejas del dominio
+    FILE *fc = fopen("cedulas.txt", "r");
+    FILE *fc_temp = fopen("temp_cedulas.txt", "w");
+
+    if (fc && fc_temp) {
+        char linea[256];
+        while (fgets(linea, sizeof(linea), fc)) {
+            if (!strstr(linea, dominio)) {
+                fputs(linea, fc_temp);
+            }
+        }
+        fclose(fc);
+        fclose(fc_temp);
+        remove("cedulas.txt");
+        rename("temp_cedulas.txt", "cedulas.txt");
+        printf("Cédula anterior eliminada.\n");
+    }
+
+    // Crear nueva cédula
+    altaCedula();
+
+    // Registrar en historial
+    FILE *hist = fopen("historial.txt", "a");
+    if (hist) {
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        char fecha[11];
+        snprintf(fecha, sizeof(fecha), "%02d/%02d/%04d", tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900);
+        int nuevoId = 1;
+        FILE *hist_r = fopen("historial.txt", "r");
+        if (hist_r) {
+            HistorialEvento tempEvt;
+            while (fscanf(hist_r, "%d;%[^;];%[^;];%[^;];%[^\n]",
+                          &tempEvt.idEvento, tempEvt.dominioAutomotor,
+                          tempEvt.tipoEvento, tempEvt.descripcion, tempEvt.fecha) == 5) {
+                nuevoId = tempEvt.idEvento + 1;
+            }
+            fclose(hist_r);
+        }
+
+        fprintf(hist, "%d;%s;%s;%s;%s\n", nuevoId, dominio, "Transferencia", "Cambio de titular del automotor", fecha);
+        fclose(hist);
+        printf("Evento de transferencia registrado en historial.\n");
+    }
 }
 
 
