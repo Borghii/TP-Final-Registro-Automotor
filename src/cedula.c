@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "cedula.h"
+#include "automotor.h"
 
 void altaCedula() {
     FILE *archivo = fopen("cedulas.txt", "a");
@@ -25,9 +26,15 @@ void altaCedula() {
     nueva.fechaVencimiento[strcspn(nueva.fechaVencimiento, "\n")] = '\0';
 
 
-    printf("Ingrese dominio/patente del vehiculo: ");
-    fgets(nueva.dominioAutomotor, sizeof(nueva.dominioAutomotor), stdin);
-    nueva.dominioAutomotor[strcspn(nueva.dominioAutomotor, "\n")] = '\0';
+    do
+    {
+        printf("Ingrese dominio/patente del vehiculo: ");
+        fgets(nueva.dominioAutomotor, sizeof(nueva.dominioAutomotor), stdin);
+        nueva.dominioAutomotor[strcspn(nueva.dominioAutomotor, "\n")] = '\0';
+
+    } while (!dominioAutomotorExiste(nueva.dominioAutomotor));
+    
+
 
 
     fprintf(archivo, "%d;%s;%s;%s\n",
@@ -41,3 +48,10 @@ void altaCedula() {
     printf("Cedula guardada exitosamente.\n");
 }
 
+int leerRegistroCedula(FILE *archivo, Cedula *cedula) {
+    return fscanf(archivo, "%d;%10[^;];%10[^;];%19[^\n]\n",
+                  &cedula->nroCedula,
+                  cedula->fechaEmision,
+                  cedula->fechaVencimiento,
+                  cedula->dominioAutomotor) == 4;
+}

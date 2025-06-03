@@ -22,8 +22,7 @@ typedef struct
 void altaAutomotor();
 void listarTodos();
 void consultarInformacionConDominio();
-
-// void bajaAutomotor();
+void bajaAutomotor();
 
 
 //Auxiliares

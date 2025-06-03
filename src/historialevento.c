@@ -97,3 +97,13 @@ void verHistorialEvento(){
 
     fclose(fe);
 }
+
+
+int leerRegistroHistorialEvento(FILE *archivo, HistorialEvento *evento) {
+    return fscanf(archivo, "%d;%9[^;];%14[^;];%49[^;];%14[^\n]\n",
+                  &evento->idEvento,
+                  evento->dominioAutomotor,
+                  evento->tipoEvento,
+                  evento->descripcion,
+                  evento->fecha) == 5;
+}

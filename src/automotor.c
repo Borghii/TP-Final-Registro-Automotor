@@ -4,6 +4,8 @@
 #include "automotor.h"
 #include "registro.h"
 #include "historialevento.h"
+#include "cedula.h"
+
 
 
 void altaAutomotor() {
@@ -88,14 +90,16 @@ void altaAutomotor() {
     printf("Automotor guardado exitosamente.\n");
 }
 
-/*
+
 void bajaAutomotor() {
-    char dominioEliminar[16];  // Reserva para leer hasta 15 caracteres + '\0'
-    printf("Ingrese el DOMINIO del vehiculo que desea dar de baja: ");
-    // Usamos scanf("%15s") en lugar de fgets para evitar el problema del '\n' residual
-    scanf("%15s", dominioEliminar);
-    // Si quieres debugear, descomenta la siguiente línea:
-    // printf(">>DEBUG: dominioEliminar leído = '%s'\n", dominioEliminar);
+    char dominioEliminar [10];
+    do
+    {
+        printf("Ingrese el dominio a eliminar del automotor a dar de baja:  \n");
+        fgets(dominioEliminar, sizeof(dominioEliminar), stdin);
+        dominioEliminar[strcspn(dominioEliminar, "\n")] = '\0';
+
+    } while (!dominioAutomotorExiste(dominioEliminar));
 
     // 1) Eliminar línea de automotores.txt
     FILE *original = fopen("automotores.txt", "r");
@@ -108,42 +112,16 @@ void bajaAutomotor() {
     }
 
     Automotor a;
-    int encontradoAuto = 0;
-    // Ajustamos los anchos de campo para que coincidan con el tamaño real en Automotor:
-    //   - dominio[10]  => usamos "%9[^;]" (hasta 9 chars + '\0')
-    //   - marca[20]    => "%19[^;]"
-    //   - modelo[20]   => "%19[^;]"
-    //   - chasis[20]   => "%19[^;]"
-    //   - motor[20]    => "%19[^;]"
-    //   - paisOrigen[50] => "%49[^;]"
-    //   - tipoUso[50]    => "%49[^;]"
-    while (fscanf(original,
-                  "%d;%9[^;];%19[^;];%19[^;];%19[^;];%19[^;];%d;%49[^;];%49[^;];%d;%d;%d\n",
-                  &a.idVehiculo,
-                  a.dominio,
-                  a.marca,
-                  a.modelo,
-                  a.chasis,
-                  a.motor,
-                  &a.anioFabricacion,
-                  a.paisOrigen,
-                  a.tipoUso,
-                  &a.peso,
-                  &a.nroDocTitular,
-                  &a.nroRegistro) == 12)
+    while (leerRegistroAutomotor(original, &a))
     {
-        // Para depurar, puedes imprimir lo que lee:
-        // printf(">>DEBUG: a.dominio = '%s'\n", a.dominio);
 
         if (strcmp(a.dominio, dominioEliminar) == 0) {
-            encontradoAuto = 1;
-            // No copiamos esta línea al temporal: quedará "eliminada"
-            continue;
+            continue;// No copiamos esta línea al temporal: quedará "eliminada"
         }
+
         // Copiamos todo lo demás al archivo temporal
         fprintf(temporal,
-                "%d;%s;%s;%s;%s;%s;%d;%s;%s;%d;%d;%d\n",
-                a.idVehiculo,
+                "%s;%s;%s;%s;%s;%d;%s;%s;%d;%d;%d\n",
                 a.dominio,
                 a.marca,
                 a.modelo,
@@ -164,63 +142,83 @@ void bajaAutomotor() {
     remove("automotores.txt");
     rename("temp.txt", "automotores.txt");
 
-    if (encontradoAuto)
-        printf("Vehículo con dominio '%s' dado de baja en automotores.txt\n", dominioEliminar);
-    else {
-        printf("No se encontró vehículo con dominio '%s' en automotores.txt\n", dominioEliminar);
-        // Como no se encontró en automotores.txt, igual debemos terminar aquí
-        return;
-    }
+    printf("Vehículo con dominio '%s' dado de baja en automotores.txt\n", dominioEliminar);
+
 
     // 2) Eliminar línea en cedulas.txt que contenga ese dominio
     FILE *ced = fopen("cedulas.txt", "r");
     FILE *ced_tmp = fopen("temp_cedulas.txt", "w");
-    if (ced && ced_tmp) {
-        char lineaCed[256];
-        while (fgets(lineaCed, sizeof(lineaCed), ced)) {
-            // Si NO encontramos el dominio dentro de la línea, la copiamos
-            if (strstr(lineaCed, dominioEliminar) == NULL) {
-                fputs(lineaCed, ced_tmp);
-            }
-            // En caso contrario, la saltamos => “la eliminamos”
-        }
-        fclose(ced);
-        fclose(ced_tmp);
-        remove("cedulas.txt");
-        rename("temp_cedulas.txt", "cedulas.txt");
-        printf("Registros en cedulas.txt relacionados al dominio '%s' eliminados.\n", dominioEliminar);
-    } else {
+
+    Cedula cedula;
+
+    if (!ced || !ced_tmp){
         if (ced) fclose(ced);
         if (ced_tmp) fclose(ced_tmp);
         printf("No se pudo procesar cedulas.txt (quizá no exista).\n");
+
     }
+
+
+    while (leerRegistroCedula(ced, &cedula)) {
+        // Si NO encontramos el dominio dentro de la línea, la copiamos
+        if (strcmp(cedula.dominioAutomotor, dominioEliminar) == 0) {
+            continue;// No copiamos esta línea al temporal: quedará "eliminada"
+        }
+
+        // Copiamos todo lo demás al archivo temporal
+        fprintf(ced_tmp,
+                "%d;%s;%s;%s\n",
+                cedula.nroCedula,
+                cedula.fechaEmision,
+                cedula.fechaVencimiento,
+                cedula.dominioAutomotor);
+    }
+
+    fclose(ced);
+    fclose(ced_tmp);
+    remove("cedulas.txt");
+    rename("temp_cedulas.txt", "cedulas.txt");
+    printf("Registros en cedulas.txt relacionados al dominio '%s' eliminados.\n", dominioEliminar);
+    
+    
 
     // 3) Eliminar historial de eventos asociados a ese dominio
     FILE *hist = fopen("historial.txt", "r");
     FILE *hist_tmp = fopen("temp_historial.txt", "w");
-    if (hist && hist_tmp) {
-        HistorialEvento he;
-        char linea[256];
-        while (fgets(linea, sizeof(linea), hist)) {
-            // Copiamos la línea si NO contiene el dominio
-            // Suponemos que el campo dominioAutomotor está al principio o bien se puede detectar con strstr
-            if (strstr(linea, dominioEliminar) == NULL) {
-                fputs(linea, hist_tmp);
-            }
-        }
-        fclose(hist);
-        fclose(hist_tmp);
-        remove("historial.txt");
-        rename("temp_historial.txt", "historial.txt");
-        printf("Historial de eventos del vehículo con dominio '%s' eliminado.\n", dominioEliminar);
-    } else {
+    if (!hist || !hist_tmp){
         if (hist) fclose(hist);
         if (hist_tmp) fclose(hist_tmp);
         printf("No se pudo procesar historial.txt (quizá no exista).\n");
+    } 
+
+    HistorialEvento he;
+
+
+    while (leerRegistroHistorialEvento(hist, &he)) {
+
+        if (strcmp(he.dominioAutomotor, dominioEliminar) == 0) {
+            continue;// No copiamos esta línea al temporal: quedará "eliminada"
+        }
+
+        // Copiamos el resto de los registros al archivo temporal
+        fprintf(hist_tmp, "%d;%s;%s;%s;%s\n",
+                he.idEvento,
+                he.dominioAutomotor,
+                he.tipoEvento,
+                he.descripcion,
+                he.fecha);
+
     }
+
+    fclose(hist);
+    fclose(hist_tmp);
+    remove("historial.txt");
+    rename("temp_historial.txt", "historial.txt");
+    printf("Historial de eventos del vehículo con dominio '%s' eliminado.\n", dominioEliminar);
+
 }
 
-*/
+
 
 
 void listarTodos() {
