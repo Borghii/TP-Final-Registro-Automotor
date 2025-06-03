@@ -11,11 +11,11 @@ void testHistorialEvento();
 void testCedula();
 void testDomicilio();
 void testRegistro();
+void testTitular();
 
 int main(){
 
-    // testAutomotor();
-    testAutomotor();
+    //testAutomotor();
     
     //testHistorialEvento();
 
@@ -23,7 +23,7 @@ int main(){
 
     //testDomicilio();
 
-    //testTitular();
+    testTitular();
 
     //testRegistro();
 
@@ -36,7 +36,7 @@ void testAutomotor(){
     //altaAutomotor();
     //listarTodos();
     //consultarInformacionConDominio();
-    bajaAutomotor();
+    //bajaAutomotor();
 }
 
 
@@ -55,7 +55,7 @@ void testDomicilio(){
 }
 
 void testTitular(){
-    //altaTitular();
+    altaTitular();
     //listarTitularesConVehiculos();
 }
 

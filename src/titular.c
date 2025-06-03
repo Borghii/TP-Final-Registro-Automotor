@@ -12,13 +12,12 @@ void altaTitular() {
     }
 
     Titular nuevo;
-    getchar(); // limpia el '\n' que queda en el buffer
     printf("Ingrese nombre: ");
     fgets(nuevo.nombre, sizeof(nuevo.nombre), stdin);
     nuevo.nombre[strcspn(nuevo.nombre, "\n")] = '\0';
 
     printf("Ingrese CUIT: ");
-    scanf("%d", &nuevo.cuit);
+    scanf("%ld", &nuevo.cuit);
     getchar(); // limpia el '\n' que queda en el buffer
 
     printf("Ingrese tipo de documento (DNI, LC, LE, etc): ");
@@ -35,7 +34,7 @@ void altaTitular() {
 
     nuevo.idDomicilio = crearDomicilio(); 
 
-    fprintf(archivo, "%s;%d;%s;%d;%s;%d\n",
+    fprintf(archivo, "%s;%ld;%s;%d;%s;%d\n",
         nuevo.nombre,
         nuevo.cuit,
         nuevo.tipoDocumento,
@@ -62,14 +61,14 @@ void listarTitularesConVehiculos() {
     Automotor a;
     Domicilio d;
 
-    while (fscanf(ft, "%[^;];%d;%[^;];%d;%[^;];%d\n",
+    while (fscanf(ft, "%[^;];%ld;%[^;];%d;%[^;];%d\n",
                   t.nombre, &t.cuit, t.tipoDocumento,
                   &t.nroDocumento, t.fechaNacimiento,
                   &t.idDomicilio) == 6) {
 
         printf("\n--- Titular ---\n");
         printf("Nombre: %s\n", t.nombre);
-        printf("CUIT: %d\n", t.cuit);
+        printf("CUIT: %ld\n", t.cuit);
         printf("Tipo de Documento: %s\n", t.tipoDocumento);
         printf("Numero de Documento: %d\n", t.nroDocumento);
         printf("Fecha de Nacimiento: %s\n", t.fechaNacimiento);
@@ -129,7 +128,7 @@ int titularExiste(int dni) {
     Titular t;
     int existe = 0;
 
-    while (fscanf(archivo, "%[^;];%d;%[^;];%d;%[^;];%d\n",
+    while (fscanf(archivo, "%[^;];%ld;%[^;];%d;%[^;];%d\n",
                   t.nombre,
                   &t.cuit,
                   t.tipoDocumento,
