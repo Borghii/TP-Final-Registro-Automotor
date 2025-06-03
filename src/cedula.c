@@ -25,16 +25,16 @@ void altaCedula() {
     nueva.fechaVencimiento[strcspn(nueva.fechaVencimiento, "\n")] = '\0';
 
 
-    printf("Ingrese id del vehiculo: ");
-    scanf("%d", &nueva.idVehiculo);
-    getchar(); // limpia el '\n' que queda en el buffer
+    printf("Ingrese dominio/patente del vehiculo: ");
+    fgets(nueva.dominioAutomotor, sizeof(nueva.dominioAutomotor), stdin);
+    nueva.dominioAutomotor[strcspn(nueva.dominioAutomotor, "\n")] = '\0';
 
 
-    fprintf(archivo, "%d;%s;%s;%d\n",
+    fprintf(archivo, "%d;%s;%s;%s\n",
         nueva.nroCedula,
         nueva.fechaEmision,
         nueva.fechaVencimiento,
-        nueva.idVehiculo
+        nueva.dominioAutomotor
     );
 
     fclose(archivo);
