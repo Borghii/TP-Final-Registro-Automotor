@@ -72,6 +72,11 @@ void altaAutomotor() {
     printf("Ingrese Nro. Documento del titular: ");
     scanf("%d", &autoNuevo.nroDocTitular);
 
+    if (!titularExiste(autoNuevo.nroDocTitular)) {
+    printf("El titular no existe. Operacion cancelada.\n");
+    return;
+}
+
     autoNuevo.nroRegistro = seleccionarRegistro();
 
     // Escribir en el archivo (formato de texto plano)
