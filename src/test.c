@@ -23,9 +23,9 @@ int main(){
 
     //testDomicilio();
 
-    testTitular();
+    //testTitular();
 
-    //testRegistro();
+    testRegistro();
 
     return 0;
 };
@@ -55,13 +55,15 @@ void testDomicilio(){
 }
 
 void testTitular(){
-    altaTitular();
+    //altaTitular();
     //listarTitularesConVehiculos();
 }
 
 void testRegistro(){
     //altaRegistro();
     //listarRegistros();
+    //reporteRegistrosCantidadAutos();
+    buscarVehiculosPorRegistro();
 }
 
 

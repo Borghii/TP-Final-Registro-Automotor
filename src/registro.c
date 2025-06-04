@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "registro.h"
 #include "domicilio.h"
+#include "automotor.h"
 
 int existenRegistros() {
     FILE *fr = fopen("registros.txt", "r");
@@ -82,11 +83,121 @@ void listarRegistros() {
 
 
 int seleccionarRegistro() {
-    printf("\n Registros disponibles: \n");
-    listarRegistros();
+    printf("\nRegistros disponibles:\n");
+    listarRegistros(); // Asumo que esta función lista todos los registros con sus IDs
+
     int idSel;
-    getchar(); // Limpiar el buffer de entrada
-    printf("\n Seleccione el ID del registro: ");
-    scanf("%d", &idSel);
+    int encontrado = 0;
+    FILE *fr = fopen("registros.txt", "r");
+    if (!fr) {
+        printf("Error al abrir archivo de registros.\n");
+        return -1; // Código de error
+    }
+
+    do {
+        printf("\nSeleccione el ID del registro: ");
+        scanf("%d", &idSel);
+
+        rewind(fr);
+        encontrado = 0;
+        int idRegistroAux, idDomicilioAux;
+        while (fscanf(fr, "%d;%d\n", &idRegistroAux, &idDomicilioAux) == 2) {
+            if (idRegistroAux == idSel) {
+                encontrado = 1;
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            printf("ID invalido. Por favor, ingrese un ID existente.\n");
+        }
+    } while (!encontrado);
+
+    fclose(fr);
     return idSel;
+}
+
+
+void reporteRegistrosCantidadAutos() {
+    FILE *fr = fopen("registros.txt", "r");
+    FILE *fd = fopen("domicilios.txt", "r");
+    FILE *fa = fopen("automotores.txt", "r");
+
+    if (!fr || !fd || !fa) {
+        printf("Error al abrir archivos.\n");
+        if (fr) fclose(fr);
+        if (fd) fclose(fd);
+        if (fa) fclose(fa);
+        return;
+    }
+
+    Registro r;
+    Domicilio d;
+    Automotor a;
+
+    printf("ID  | Direccion                                          | Cant. Autos\n");
+    printf("-------------------------------------------------------------------------\n");
+
+    while (fscanf(fr, "%d;%d\n", &r.idRegistro, &r.idDomicilio) == 2) {
+        // Buscar domicilio correspondiente
+        rewind(fd);
+        char direccion[100] = "No encontrada";
+
+        while (fscanf(fd, "%d;%[^;];%[^;];%d;%[^;];%d\n",
+                      &d.idDomicilio, d.ciudad, d.provincia, &d.codigoPostal, d.calle, &d.numero) == 6) {
+            if (d.idDomicilio == r.idDomicilio) {
+                snprintf(direccion, sizeof(direccion), "%s %d, %s (%d), %s",
+                         d.calle, d.numero, d.ciudad, d.codigoPostal, d.provincia);
+                break;
+            }
+        }
+
+        // Contar cuántos automotores tiene ese registro
+        rewind(fa);
+        int contador = 0;
+        while (leerRegistroAutomotor(fa, &a)) {
+            if (a.nroRegistro == r.idRegistro) {
+                contador++;
+            }
+        }
+
+        // Imprimir línea del reporte
+        printf("%-3d | %-50s | %d\n", r.idRegistro, direccion, contador);
+    }
+
+    fclose(fr);
+    fclose(fd);
+    fclose(fa);
+}
+
+void buscarVehiculosPorRegistro() {
+    int idBusqueda = seleccionarRegistro();
+    
+
+    FILE *fa = fopen("automotores.txt", "r");
+    if (!fa) {
+        printf("Error al abrir el archivo de automotores.\n");
+        return;
+    }
+
+    Automotor a;
+    int encontrado = 0;
+
+    printf("Vehiculos en el registro %d:\n", idBusqueda);
+    printf("Dominio    | Marca               | Modelo              | Anioo | Tipo Uso\n");
+    printf("-----------------------------------------------------------------------\n");
+
+    while (leerRegistroAutomotor(fa, &a)) {
+        if (a.nroRegistro == idBusqueda) {
+            encontrado = 1;
+            printf("%-10s | %-19s | %-19s | %-3d | %s\n",
+                   a.dominio, a.marca, a.modelo, a.anioFabricacion, a.tipoUso);
+        }
+    }
+
+    if (!encontrado) {
+        printf("No se encontraron vehiculos para ese registro.\n");
+    }
+
+    fclose(fa);
 }

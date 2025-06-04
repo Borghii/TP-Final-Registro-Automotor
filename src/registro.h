@@ -11,6 +11,8 @@ typedef struct
 // Funciones principales
 void altaRegistro();
 void listarRegistros();
+void reporteRegistrosCantidadAutos();
+void buscarVehiculosPorRegistro();
 
 // Auxiliar
 int seleccionarRegistro();
