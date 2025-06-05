@@ -184,7 +184,7 @@ void buscarVehiculosPorRegistro() {
     int encontrado = 0;
 
     printf("Vehiculos en el registro %d:\n", idBusqueda);
-    printf("Dominio    | Marca               | Modelo              | Anioo | Tipo Uso\n");
+    printf("Dominio    | Marca               | Modelo              | Anioo| Tipo Uso\n");
     printf("-----------------------------------------------------------------------\n");
 
     while (leerRegistroAutomotor(fa, &a)) {

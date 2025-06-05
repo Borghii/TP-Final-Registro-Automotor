@@ -25,7 +25,7 @@ int main(){
 
     //testTitular();
 
-    testRegistro();
+    //testRegistro();
 
     return 0;
 };
@@ -63,7 +63,7 @@ void testRegistro(){
     //altaRegistro();
     //listarRegistros();
     //reporteRegistrosCantidadAutos();
-    buscarVehiculosPorRegistro();
+    //buscarVehiculosPorRegistro();
 }
 
 
