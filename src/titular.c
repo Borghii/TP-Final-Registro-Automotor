@@ -3,6 +3,7 @@
 #include "titular.h"
 #include "automotor.h"
 #include "domicilio.h"
+#include "utils.h"
 
 void altaTitular() {
     FILE *archivo = fopen("titulares.txt", "a");
@@ -16,17 +17,13 @@ void altaTitular() {
     fgets(nuevo.nombre, sizeof(nuevo.nombre), stdin);
     nuevo.nombre[strcspn(nuevo.nombre, "\n")] = '\0';
 
-    printf("Ingrese CUIT: ");
-    scanf("%ld", &nuevo.cuit);
-    getchar(); // limpia el '\n' que queda en el buffer
+    leerLongValidado("Ingrese CUIT: ", &nuevo.cuit);
 
     printf("Ingrese tipo de documento (DNI, LC, LE, etc): ");
     fgets(nuevo.tipoDocumento, sizeof(nuevo.tipoDocumento), stdin);
     nuevo.tipoDocumento[strcspn(nuevo.tipoDocumento, "\n")] = '\0';
 
-    printf("Ingrese numero de documento: ");
-    scanf("%d", &nuevo.nroDocumento);
-    getchar(); // limpia el '\n' que queda en el buffer
+    leerEnteroValidado("Ingrese numero de documento: ", &nuevo.nroDocumento);
 
     printf("Ingrese fecha de nacimiento (dd/mm/aaaa): ");
     fgets(nuevo.fechaNacimiento, sizeof(nuevo.fechaNacimiento), stdin);

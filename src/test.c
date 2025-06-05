@@ -5,6 +5,7 @@
 #include "domicilio.h"
 #include "titular.h"
 #include "registro.h"
+#include "utils.h"
 
 void testAutomotor();
 void testHistorialEvento();
@@ -13,19 +14,22 @@ void testDomicilio();
 void testRegistro();
 void testTitular();
 
+
+// gcc test.c automotor.c cedula.c titular.c historialevento.c registro.c domicilio.c utils.c -o test
+
 int main(){
 
     //testAutomotor();
     
     //testHistorialEvento();
 
-    //testCedula();
+    testCedula();
 
     //testDomicilio();
 
     //testTitular();
 
-    testRegistro();
+    //testRegistro();
 
     return 0;
 };
@@ -33,7 +37,7 @@ int main(){
 void testAutomotor(){
     // transferirVehiculo();
 
-    //altaAutomotor();
+    altaAutomotor();
     //listarTodos();
     //consultarInformacionConDominio();
     //bajaAutomotor();
@@ -42,12 +46,12 @@ void testAutomotor(){
 
 void testHistorialEvento(){
     //altaEvento(); 
-    //verHistorialEvento();
+    verHistorialEvento();
 }
 
 
 void testCedula(){
-    //altaCedula();
+    altaCedula();
 }
 
 void testDomicilio(){
@@ -55,7 +59,7 @@ void testDomicilio(){
 }
 
 void testTitular(){
-    //altaTitular();
+    altaTitular();
     //listarTitularesConVehiculos();
 }
 
@@ -63,7 +67,7 @@ void testRegistro(){
     //altaRegistro();
     //listarRegistros();
     //reporteRegistrosCantidadAutos();
-    buscarVehiculosPorRegistro();
+    //buscarVehiculosPorRegistro();
 }
 
 

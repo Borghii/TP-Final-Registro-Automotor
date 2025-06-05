@@ -16,6 +16,7 @@ void altaCedula();
 
 //Funciones auxiliares
 int leerRegistroCedula(FILE *archivo, Cedula *cedula);
+int cedulaExiste(int nroCedula);
 
 
 #endif

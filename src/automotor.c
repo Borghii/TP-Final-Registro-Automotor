@@ -7,11 +7,12 @@
 #include "titular.h"
 #include "historialevento.h"
 #include <time.h>
-#include "cedula.h"
+#include "utils.h"
 
 
 
 void altaAutomotor() {
+
     FILE *archivo = fopen("automotores.txt", "a"); // modo append
     if (archivo == NULL) {
         printf("Error al abrir el archivo.\n");
@@ -20,10 +21,8 @@ void altaAutomotor() {
 
     Automotor autoNuevo;
 
-
     do{
        
-
         printf("Ingrese dominio: ");
         fgets(autoNuevo.dominio, sizeof(autoNuevo.dominio), stdin);
         autoNuevo.dominio[strcspn(autoNuevo.dominio, "\n")] = '\0';
@@ -48,15 +47,11 @@ void altaAutomotor() {
     fgets(autoNuevo.chasis, sizeof(autoNuevo.chasis), stdin);
     autoNuevo.chasis[strcspn(autoNuevo.chasis, "\n")] = '\0';
 
-
     printf("Ingrese numero de motor: ");
     fgets(autoNuevo.motor, sizeof(autoNuevo.motor), stdin);
     autoNuevo.motor[strcspn(autoNuevo.motor, "\n")] = '\0';
 
-
-    printf("Ingrese anio de fabricacion: ");
-    scanf("%d", &autoNuevo.anioFabricacion);
-    getchar(); // limpia el '\n' que queda en el buffer
+    leerEnteroValidado("Ingrese anio de fabricacion: ", &autoNuevo.anioFabricacion);
 
     printf("Ingrese pais de origen: ");
     fgets(autoNuevo.paisOrigen, sizeof(autoNuevo.paisOrigen), stdin);
@@ -66,16 +61,20 @@ void altaAutomotor() {
     fgets(autoNuevo.tipoUso, sizeof(autoNuevo.tipoUso), stdin);
     autoNuevo.tipoUso[strcspn(autoNuevo.tipoUso, "\n")] = '\0';
 
-    printf("Ingrese peso (kg): ");
-    scanf("%d", &autoNuevo.peso);
+    leerEnteroValidado("Ingrese peso (kg): ", &autoNuevo.peso);
 
-    printf("Ingrese Nro. Documento del titular: ");
-    scanf("%d", &autoNuevo.nroDocTitular);
+    do
+    {
+        leerEnteroValidado("Ingrese Nro. Documento del titular: ", &autoNuevo.nroDocTitular);
 
-    if (!titularExiste(autoNuevo.nroDocTitular)) {
-    printf("El titular no existe. Operacion cancelada.\n");
-    return;
-}
+        if (!titularExiste(autoNuevo.nroDocTitular)) {
+            printf("El titular con DNI %d no existe. Debe darlo de alta primero.\n", autoNuevo.nroDocTitular);
+            altaTitular(); 
+        }
+
+    } while (!titularExiste(autoNuevo.nroDocTitular));
+
+
 
     autoNuevo.nroRegistro = seleccionarRegistro();
 
@@ -93,6 +92,7 @@ void altaAutomotor() {
         autoNuevo.nroDocTitular,
         autoNuevo.nroRegistro
     );
+
 
     fclose(archivo);
     printf("Automotor guardado exitosamente.\n");
@@ -349,8 +349,7 @@ void transferirVehiculo() {
         return;
     }
 
-    printf("Ingrese DNI del nuevo titular: ");
-    scanf("%d", &nuevoDNI);
+    leerEnteroValidado("Ingrese DNI del nuevo titular: ", &nuevoDNI);
 
     if (!titularExiste(nuevoDNI)) {
         printf("No existe un titular con ese DNI. Debe darlo de alta primero.\n");

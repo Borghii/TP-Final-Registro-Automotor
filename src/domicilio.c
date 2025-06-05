@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "domicilio.h"  
+#include "utils.h"
 
 int existeIdDomicilio(int idBuscado) {
     FILE *archivo = fopen("domicilios.txt", "r");
@@ -44,16 +45,13 @@ int crearDomicilio() {
     fgets(nuevo.provincia, sizeof(nuevo.provincia), stdin);
     nuevo.provincia[strcspn(nuevo.provincia, "\n")] = '\0';
 
-    printf("Ingrese codigo postal: ");
-    scanf("%d", &nuevo.codigoPostal);
-    getchar();
+    leerEnteroValidado("Ingrese codigo postal: ", &nuevo.codigoPostal);
 
     printf("Ingrese calle: ");
     fgets(nuevo.calle, sizeof(nuevo.calle), stdin);
     nuevo.calle[strcspn(nuevo.calle, "\n")] = '\0';
 
-    printf("Ingrese numero: ");
-    scanf("%d", &nuevo.numero);
+    leerEnteroValidado("Ingrese numero de calle: ", &nuevo.numero);
 
     fprintf(archivo, "%d;%s;%s;%d;%s;%d\n",
             nuevo.idDomicilio, nuevo.ciudad, nuevo.provincia,
