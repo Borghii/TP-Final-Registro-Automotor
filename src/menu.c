@@ -5,6 +5,7 @@
 #include "cedula.h"
 #include "registro.h"
 #include "historialevento.h"
+#include "utils.h"
 
 void menuShow()
 {
@@ -22,8 +23,8 @@ int pedirOpcion(int a, int b) //Pasamos los parametros entre los que oscila lo q
     int opcion;
     do
     {
-        printf("Ingrese una opcion: ");
-        scanf("%d", &opcion);
+        leerEnteroValidado("Ingrese una opcion: ", &opcion);
+
     } while (opcion<a || opcion>b);
    
     return opcion;
@@ -76,15 +77,10 @@ void menuAutomotores()
         switch (op)
         {
         case 1:
-            int dni;
-                printf("Ingrese DNI del titular al que se le asignara el vehiculo: ");
-                scanf("%d", &dni);
-                if (!titularExiste(dni)) {
-                    printf("ERROR: No existe un titular con el DNI %d. Debe darlo de alta primero.\n", dni);
-                } else {
-                    altaAutomotor();  // Se podria mejorar pasandole como parametro dni para no pedirlo de nuevo cuando se da de alta.
-                    altaCedula();
-                }
+                
+            altaAutomotor();  
+            altaCedula();
+                
             break;
 
         case 2:
