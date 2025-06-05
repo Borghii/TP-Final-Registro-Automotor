@@ -4,5 +4,8 @@
 
 void menuShow();
 int pedirOpcion(int a, int b);
+void menuTitulares();
+void menuAutomotores();
+void menuReportes();
 
 #endif
