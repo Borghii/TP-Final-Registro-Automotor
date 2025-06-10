@@ -2,7 +2,8 @@
 
 Este proyecto consiste en un sistema de registro automotor desarrollado como trabajo práctico final. Permite la gestión de titulares, vehículos, cédulas, domicilios, y eventos del historial de cada vehículo.
 
-![Captura del programa](https://github.com/user-attachments/assets/2300395f-45fd-4a53-9558-f967c3e35757)
+![db-registro-automotor (1)](https://github.com/user-attachments/assets/4201f9b1-e367-4ba4-9f05-791e55e5defe)
+
 
 ## Documentación
 
