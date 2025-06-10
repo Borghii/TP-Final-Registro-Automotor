@@ -15,7 +15,8 @@ void testRegistro();
 void testTitular();
 
 
-// gcc test.c automotor.c cedula.c titular.c historialevento.c registro.c domicilio.c utils.c -o test
+// gcc -Iinclude test/test.c src/titular.c src/automotor.c src/cedula.c src/historialevento.c src/registro.c src/domicilio.c src/utils.c -o test.exe
+
 
 int main(){
 
@@ -23,11 +24,11 @@ int main(){
     
     //testHistorialEvento();
 
-    testCedula();
+    // testCedula();
 
     //testDomicilio();
 
-    //testTitular();
+    testTitular();
 
     //testRegistro();
 
