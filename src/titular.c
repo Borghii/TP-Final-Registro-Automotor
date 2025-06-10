@@ -23,7 +23,9 @@ void altaTitular() {
     fgets(nuevo.tipoDocumento, sizeof(nuevo.tipoDocumento), stdin);
     nuevo.tipoDocumento[strcspn(nuevo.tipoDocumento, "\n")] = '\0';
 
-    leerEnteroValidado("Ingrese numero de documento: ", &nuevo.nroDocumento);
+    do {
+         leerEnteroValidado("Ingrese numero de documento: ", &nuevo.nroDocumento);
+    } while (titularExiste(nuevo.nroDocumento));
 
     printf("Ingrese fecha de nacimiento (dd/mm/aaaa): ");
     fgets(nuevo.fechaNacimiento, sizeof(nuevo.fechaNacimiento), stdin);
