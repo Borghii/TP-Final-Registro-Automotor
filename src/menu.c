@@ -130,7 +130,7 @@ void menuReportes()
         switch (op)
         {
         case 1:
-            listarRegistros();
+            buscarVehiculosPorRegistro();
             break;
 
         case 2:
