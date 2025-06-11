@@ -28,6 +28,7 @@ void altaCedula() {
     printf("Ingrese fecha de emision (dd/mm/aaaa): ");
     fgets(nueva.fechaEmision, sizeof(nueva.fechaEmision), stdin);
     nueva.fechaEmision[strcspn(nueva.fechaEmision, "\n")] = '\0';
+    getchar();
 
 
     printf("Ingrese fecha de vencimiento (dd/mm/aaaa): ");
