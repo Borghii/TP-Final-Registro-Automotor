@@ -1,8 +1,5 @@
-2;ACM 2PT;Accidente;Choco el boludo;11/112011
-3;ACM 3PT;Multa;No pago el medido;12/12/1212
-4;ACM1PT;Transferencia;Cambio de titular del automotor;03/06/2025
-5;ACM1PT;Transferencia;Cambio de titular del automotor;03/06/2025
-6;ACM1PT;Transferencia;Cambio de titular del automotor;03/06/2025
-7;ACM 1PTE;Transferencia;Cambio de titular del automotor;03/06/2025
-8;ACM 1PT;Transferencia;Cambio de titular del automotor;12/06/2025
-9;ACM 2PT;Transferencia;Cambio de titular del automotor;12/06/2025
+1;PMV745;Multa;Exceso de velocidad;20/05/2021
+2;ABC123;Accidente;Colision leve trasera;10/08/2022
+3;XYZ789;Verificacion Técnica;Aprobada sin observaciones;15/02/2023
+4;QWE321;Robo;Sustraido espejo lateral;01/01/2021
+5;MNB987;Multa;Estacionamiento indebido;18/03/2023
