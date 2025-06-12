@@ -1,5 +1,5 @@
 100;Rosario;Santa Fe;2000;San Martin;123
 101;Santa Fe;Santa Fe;3000;9 de Julio;456
-102;Cordoba;CCordoba;5000;Belgrano;789
+102;Cordoba;Cordoba;5000;Belgrano;789
 103;Mendoza;Mendoza;5500;Sarmiento;321
 104;Tucuman;Tucuman;4000;Mitre;654

@@ -73,6 +73,8 @@ void verHistorialEvento(){
         dominio[strcspn(dominio, "\n")] = '\0';
         if (!dominioAutomotorExiste(dominio)) {
             printf("Dominio invalido. Intente de nuevo.\n");
+            listarTodos();
+            printf("\n");
         }
     } while (!dominioAutomotorExiste(dominio));
     
