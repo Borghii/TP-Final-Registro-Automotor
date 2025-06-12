@@ -150,7 +150,7 @@ void bajaAutomotor() {
     remove("data/automotores.txt");
     rename("data/temp.txt", "data/automotores.txt");
 
-    printf("Vehículo con dominio '%s' dado de baja en automotores.txt\n", dominioEliminar);
+    printf("Vehiculo con dominio '%s' dado de baja en automotores.txt\n", dominioEliminar);
 
 
     // 2) Eliminar línea en cedulas.txt que contenga ese dominio
