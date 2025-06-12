@@ -4,7 +4,7 @@
 #include "automotor.h"
 
 int existenRegistros() {
-    FILE *fr = fopen("registros.txt", "r");
+    FILE *fr = fopen("data/registros.txt", "r");
     if (fr == NULL)
         return 0;
 
@@ -16,7 +16,7 @@ int existenRegistros() {
 
 
 void altaRegistro() {
-    FILE *fr = fopen("registros.txt", "r");
+    FILE *fr = fopen("data/registros.txt", "r");
     int ultimoID = 0;
     Registro temp;
 
@@ -32,7 +32,7 @@ void altaRegistro() {
     r.idRegistro = ultimoID + 1;
     r.idDomicilio = crearDomicilio();
 
-    fr = fopen("registros.txt", "a");
+    fr = fopen("data/registros.txt", "a");
     if (!fr) {
         printf("Error al abrir registros.txt para escritura.\n");
         return;
@@ -47,8 +47,8 @@ void altaRegistro() {
 
 
 void listarRegistros() {
-    FILE *fr = fopen("registros.txt", "r");
-    FILE *fd = fopen("domicilios.txt", "r");
+    FILE *fr = fopen("data/registros.txt", "r");
+    FILE *fd = fopen("data/domicilios.txt", "r");
     if (!fr || !fd) {
         printf("Error al abrir archivos.\n");
         return;
@@ -88,7 +88,7 @@ int seleccionarRegistro() {
 
     int idSel;
     int encontrado = 0;
-    FILE *fr = fopen("registros.txt", "r");
+    FILE *fr = fopen("data/registros.txt", "r");
     if (!fr) {
         printf("Error al abrir archivo de registros.\n");
         return -1; // Código de error
@@ -119,9 +119,9 @@ int seleccionarRegistro() {
 
 
 void reporteRegistrosCantidadAutos() {
-    FILE *fr = fopen("registros.txt", "r");
-    FILE *fd = fopen("domicilios.txt", "r");
-    FILE *fa = fopen("automotores.txt", "r");
+    FILE *fr = fopen("data/registros.txt", "r");
+    FILE *fd = fopen("data/domicilios.txt", "r");
+    FILE *fa = fopen("data/automotores.txt", "r");
 
     if (!fr || !fd || !fa) {
         printf("Error al abrir archivos.\n");
@@ -174,7 +174,7 @@ void buscarVehiculosPorRegistro() {
     int idBusqueda = seleccionarRegistro();
     
 
-    FILE *fa = fopen("automotores.txt", "r");
+    FILE *fa = fopen("data/automotores.txt", "r");
     if (!fa) {
         printf("Error al abrir el archivo de automotores.\n");
         return;

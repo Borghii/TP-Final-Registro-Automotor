@@ -13,7 +13,7 @@
 
 void altaAutomotor() {
 
-    FILE *archivo = fopen("automotores.txt", "a"); // modo append
+    FILE *archivo = fopen("data/automotores.txt", "a"); // modo append
     if (archivo == NULL) {
         printf("Error al abrir el archivo.\n");
         return;
@@ -110,8 +110,8 @@ void bajaAutomotor() {
     } while (!dominioAutomotorExiste(dominioEliminar));
 
     // 1) Eliminar línea de automotores.txt
-    FILE *original = fopen("automotores.txt", "r");
-    FILE *temporal = fopen("temp.txt", "w");
+    FILE *original = fopen("data/automotores.txt", "r");
+    FILE *temporal = fopen("data/temp.txt", "w");
     if (!original || !temporal) {
         printf("Error al abrir los archivos de automotores.\n");
         if (original) fclose(original);
@@ -147,15 +147,15 @@ void bajaAutomotor() {
     fclose(temporal);
 
     // Reemplazamos el archivo original por el temporal
-    remove("automotores.txt");
-    rename("temp.txt", "automotores.txt");
+    remove("data/automotores.txt");
+    rename("data/temp.txt", "data/automotores.txt");
 
     printf("Vehículo con dominio '%s' dado de baja en automotores.txt\n", dominioEliminar);
 
 
     // 2) Eliminar línea en cedulas.txt que contenga ese dominio
-    FILE *ced = fopen("cedulas.txt", "r");
-    FILE *ced_tmp = fopen("temp_cedulas.txt", "w");
+    FILE *ced = fopen("data/cedulas.txt", "r");
+    FILE *ced_tmp = fopen("data/temp_cedulas.txt", "w");
 
     Cedula cedula;
 
@@ -184,15 +184,15 @@ void bajaAutomotor() {
 
     fclose(ced);
     fclose(ced_tmp);
-    remove("cedulas.txt");
-    rename("temp_cedulas.txt", "cedulas.txt");
+    remove("data/cedulas.txt");
+    rename("data/temp_cedulas.txt", "data/cedulas.txt");
     printf("Registros en cedulas.txt relacionados al dominio '%s' eliminados.\n", dominioEliminar);
     
     
 
     // 3) Eliminar historial de eventos asociados a ese dominio
-    FILE *hist = fopen("historial.txt", "r");
-    FILE *hist_tmp = fopen("temp_historial.txt", "w");
+    FILE *hist = fopen("data/historial.txt", "r");
+    FILE *hist_tmp = fopen("data/temp_historial.txt", "w");
     if (!hist || !hist_tmp){
         if (hist) fclose(hist);
         if (hist_tmp) fclose(hist_tmp);
@@ -220,8 +220,8 @@ void bajaAutomotor() {
 
     fclose(hist);
     fclose(hist_tmp);
-    remove("historial.txt");
-    rename("temp_historial.txt", "historial.txt");
+    remove("data/historial.txt");
+    rename("data/temp_historial.txt", "data/historial.txt");
     printf("Historial de eventos del vehículo con dominio '%s' eliminado.\n", dominioEliminar);
 
 }
@@ -230,7 +230,7 @@ void bajaAutomotor() {
 
 
 void listarTodos() {
-    FILE *f = fopen("automotores.txt", "r");
+    FILE *f = fopen("data/automotores.txt", "r");
     if (!f) {
         printf("No se pudo abrir el archivo de vehiculos.\n");
         return;
@@ -268,7 +268,7 @@ void consultarInformacionConDominio(){
 
 
 int dominioAutomotorExiste(const char dominio[10]) {
-    FILE *archivo = fopen("automotores.txt", "r");
+    FILE *archivo = fopen("data/automotores.txt", "r");
     if (archivo == NULL) {
         return 0; // No hay archivo aún: ningún automotor registrado
     }
@@ -308,7 +308,7 @@ int leerRegistroAutomotor(FILE *archivo, Automotor *automotor) {
 
 void listarVehiculoConDominio(const char dominio[10]){
 
-    FILE *archivo = fopen("automotores.txt", "r");
+    FILE *archivo = fopen("data/automotores.txt", "r");
     if (archivo == NULL) {
         return ; 
     }
@@ -357,8 +357,8 @@ void transferirVehiculo() {
     }
 
     // Actualizar el titular del automotor
-    FILE *fa = fopen("automotores.txt", "r");
-    FILE *temp = fopen("temp_auto.txt", "w");
+    FILE *fa = fopen("data/automotores.txt", "r");
+    FILE *temp = fopen("data/temp_auto.txt", "w");
     if (!fa || !temp) {
         printf("Error al acceder a los archivos de automotores.\n");
         return;
@@ -379,8 +379,8 @@ void transferirVehiculo() {
 
     fclose(fa);
     fclose(temp);
-    remove("automotores.txt");
-    rename("temp_auto.txt", "automotores.txt");
+    remove("data/automotores.txt");
+    rename("data/temp_auto.txt", "data/automotores.txt");
 
     if (modificado) {
         printf("Transferencia realizada correctamente.\n");
@@ -390,8 +390,8 @@ void transferirVehiculo() {
     }
 
     // Eliminar cédulas viejas del dominio
-    FILE *fc = fopen("cedulas.txt", "r");
-    FILE *fc_temp = fopen("temp_cedulas.txt", "w");
+    FILE *fc = fopen("data/cedulas.txt", "r");
+    FILE *fc_temp = fopen("data/temp_cedulas.txt", "w");
 
     if (fc && fc_temp) {
         char linea[256];
@@ -402,8 +402,8 @@ void transferirVehiculo() {
         }
         fclose(fc);
         fclose(fc_temp);
-        remove("cedulas.txt");
-        rename("temp_cedulas.txt", "cedulas.txt");
+        remove("data/cedulas.txt");
+        rename("data/temp_cedulas.txt", "data/cedulas.txt");
         printf("Cédula anterior eliminada.\n");
     }
 
@@ -411,14 +411,14 @@ void transferirVehiculo() {
     altaCedula();
 
     // Registrar en historial
-    FILE *hist = fopen("historial.txt", "a");
+    FILE *hist = fopen("data/historial.txt", "a");
     if (hist) {
         time_t t = time(NULL);
         struct tm tm = *localtime(&t);
         char fecha[11];
         snprintf(fecha, sizeof(fecha), "%02d/%02d/%04d", tm.tm_mday, tm.tm_mon+1, tm.tm_year+1900);
         int nuevoId = 1;
-        FILE *hist_r = fopen("historial.txt", "r");
+        FILE *hist_r = fopen("data/historial.txt", "r");
         if (hist_r) {
             HistorialEvento tempEvt;
             while (fscanf(hist_r, "%d;%[^;];%[^;];%[^;];%[^\n]",

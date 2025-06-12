@@ -5,7 +5,7 @@
 #include "utils.h"
 
 void altaCedula() {
-    FILE *archivo = fopen("cedulas.txt", "a");
+    FILE *archivo = fopen("data/cedulas.txt", "a");
 
     if (archivo == NULL) {
         printf("Error al abrir el archivo de cedulas.\n");
@@ -25,15 +25,8 @@ void altaCedula() {
     } while (cedulaExiste(nueva.nroCedula));
 
 
-    printf("Ingrese fecha de emision (dd/mm/aaaa): ");
-    fgets(nueva.fechaEmision, sizeof(nueva.fechaEmision), stdin);
-    nueva.fechaEmision[strcspn(nueva.fechaEmision, "\n")] = '\0';
-    getchar();
-
-
-    printf("Ingrese fecha de vencimiento (dd/mm/aaaa): ");
-    fgets(nueva.fechaVencimiento, sizeof(nueva.fechaVencimiento), stdin);
-    nueva.fechaVencimiento[strcspn(nueva.fechaVencimiento, "\n")] = '\0';
+    leerFechaValidada("Ingrese fecha de emision (dd/mm/aaaa): ", nueva.fechaEmision, sizeof(nueva.fechaEmision));
+    leerFechaValidada("Ingrese fecha de vencimiento (dd/mm/aaaa): ", nueva.fechaVencimiento, sizeof(nueva.fechaVencimiento));
 
 
     do
@@ -62,7 +55,7 @@ void altaCedula() {
 
 
 int cedulaExiste(int nroCedula) {
-    FILE *archivo = fopen("cedulas.txt", "r");
+    FILE *archivo = fopen("data/cedulas.txt", "r");
     if (archivo == NULL) {
         return 0; // No hay archivo aún: ningún registro
     }

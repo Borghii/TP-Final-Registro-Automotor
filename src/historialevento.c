@@ -2,9 +2,10 @@
 #include <string.h>
 #include "automotor.h"
 #include "historialevento.h"
+#include "utils.h"
 
 void altaEvento(){
-    FILE *fe = fopen("historial.txt", "a");
+    FILE *fe = fopen("data/historial.txt", "a");
     if (!fe) {
         printf("Error al abrir el archivo de historial.\n");
         return;
@@ -34,12 +35,11 @@ void altaEvento(){
     fgets(e.descripcion, sizeof(e.descripcion), stdin);
     e.descripcion[strcspn(e.descripcion, "\n")] = '\0';
 
-    printf("Ingrese fecha (dd/mm/aaaa): ");
-    fgets(e.fecha, sizeof(e.fecha), stdin);
-    e.fecha[strcspn(e.fecha, "\n")] = '\0';
+
+    leerFechaValidada("Ingrese fecha (dd/mm/aaaa): ", e.fecha, sizeof(e.fecha));
 
     // Generar idEvento automaticamente
-    FILE *fr = fopen("historial.txt", "r");
+    FILE *fr = fopen("data/historial.txt", "r");
     int ultimoID = 0;
     if (fr) {
         HistorialEvento temp;
@@ -60,7 +60,7 @@ void altaEvento(){
 
 
 void verHistorialEvento(){
-    FILE *fe = fopen("historial.txt", "r");
+    FILE *fe = fopen("data/historial.txt", "r");
     if (!fe) {
         printf("No se pudo abrir el archivo de historial.\n");
         return;
