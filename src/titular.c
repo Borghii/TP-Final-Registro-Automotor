@@ -6,7 +6,7 @@
 #include "utils.h"
 
 void altaTitular() {
-    FILE *archivo = fopen("titulares.txt", "a");
+    FILE *archivo = fopen("data/titulares.txt", "a");
     if (archivo == NULL) {
         printf("Error al abrir el archivo de titulares.\n");
         return;
@@ -27,9 +27,8 @@ void altaTitular() {
          leerEnteroValidado("Ingrese numero de documento: ", &nuevo.nroDocumento);
     } while (titularExiste(nuevo.nroDocumento));
 
-    printf("Ingrese fecha de nacimiento (dd/mm/aaaa): ");
-    fgets(nuevo.fechaNacimiento, sizeof(nuevo.fechaNacimiento), stdin);
-    nuevo.fechaNacimiento[strcspn(nuevo.fechaNacimiento, "\n")] = '\0';
+    leerFechaValidada("Ingrese fecha de nacimiento (dd/mm/aaaa): ", nuevo.fechaNacimiento, sizeof(nuevo.fechaNacimiento));
+
 
     nuevo.idDomicilio = crearDomicilio(); 
 
@@ -47,9 +46,9 @@ void altaTitular() {
 }
 
 void listarTitularesConVehiculos() {
-    FILE *ft = fopen("titulares.txt", "r");
-    FILE *fa = fopen("automotores.txt", "r");
-    FILE *fd = fopen("domicilios.txt", "r");
+    FILE *ft = fopen("data/titulares.txt", "r");
+    FILE *fa = fopen("data/automotores.txt", "r");
+    FILE *fd = fopen("data/domicilios.txt", "r");
 
     if (!ft || !fa || !fd) {
         printf("Error al abrir archivos.\n");
@@ -121,7 +120,7 @@ void listarTitularesConVehiculos() {
 }
 
 int titularExiste(int dni) {
-    FILE *archivo = fopen("titulares.txt", "r");
+    FILE *archivo = fopen("data/titulares.txt", "r");
     if (archivo == NULL) return 0;
 
     Titular t;

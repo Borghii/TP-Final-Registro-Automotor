@@ -24,11 +24,11 @@ int main(){
     
     //testHistorialEvento();
 
-    // testCedula();
+    testCedula();
 
     //testDomicilio();
 
-    testTitular();
+    //testTitular();
 
     //testRegistro();
 

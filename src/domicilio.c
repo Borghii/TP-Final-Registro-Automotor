@@ -6,7 +6,7 @@
 #include "utils.h"
 
 int existeIdDomicilio(int idBuscado) {
-    FILE *archivo = fopen("domicilios.txt", "r");
+    FILE *archivo = fopen("data/domicilios.txt", "r");
     if (!archivo) return 0; // Si no existe el archivo, entonces no hay conflicto
 
     int id;
@@ -24,7 +24,7 @@ int existeIdDomicilio(int idBuscado) {
 
 int crearDomicilio() {
     srand(time(NULL));
-    FILE *archivo = fopen("domicilios.txt", "a+");
+    FILE *archivo = fopen("data/domicilios.txt", "a+");
     if (!archivo) {
         printf("Error al abrir el archivo de domicilios.\n");
         return -1;
