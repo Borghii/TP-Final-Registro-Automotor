@@ -37,6 +37,8 @@ void altaCedula() {
 
         if (!dominioAutomotorExiste(nueva.dominioAutomotor)  ) {
             printf("El dominio ingresado no existe. Ingrese uno valido.\n");
+            listarTodos();
+            printf("\n");
         }
 
     } while (!dominioAutomotorExiste(nueva.dominioAutomotor));
