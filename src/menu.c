@@ -7,9 +7,22 @@
 #include "historialevento.h"
 #include "utils.h"
 
+int condition = 1; // Variable para controlar si se muestra el mensaje de bienvenida
+
 void menuShow()
 {
-    printf("\n ---- REGISTRO AUTOMOTOR DNRPA---- \n");
+    if (condition)
+    {
+        printf("\n\n ---- BIENVENIDO AL SISTEMA DE REGISTRO AUTOMOTOR DNRPA ---- \n\n");
+        printf("Este sistema permite gestionar titulares, automotores y sus registros.\n");
+        printf("Puede realizar altas, bajas, transferencias y consultar informacion de vehiculos.\n");
+        printf("Ademas, permite registrar eventos y generar reportes sobre los vehiculos.\n");
+        printf("Para comenzar, seleccione una de las opciones del menu.\n");
+        condition = 0; // Cambiamos la variable para que no se vuelva a mostrar el mensaje
+
+    }
+    
+    printf("\n\n ---- REGISTRO AUTOMOTOR DNRPA---- \n\n");
     printf("1) GESTION TITULARES\n");
     printf("2) GESTION AUTOMOTORES\n");
     printf("3) ALTA REGISTRO \n");
@@ -23,7 +36,13 @@ int pedirOpcion(int a, int b) //Pasamos los parametros entre los que oscila lo q
     int opcion;
     do
     {
-        leerEnteroValidado("Ingrese una opcion: ", &opcion);
+        leerEnteroValidado("\nIngrese una opcion: ", &opcion);
+
+        if (opcion < a || opcion > b) 
+        {
+            printf("Opcion incorrecta. Debe ser un numero entre %d y %d.\n", a, b);
+        }
+
 
     } while (opcion<a || opcion>b);
    
@@ -35,7 +54,8 @@ void menuTitulares()
     int op=1;
     do
     {
-        printf("\n\n1) Alta titular.\n");
+        printf("\n\n---- MENU TITULARES ----\n\n");
+        printf("1) Alta titular.\n");
         printf("2) Mostrar titulares con vehiculos.\n");
         printf("0) Volver.\n");
         op = pedirOpcion(0,3);
@@ -53,9 +73,6 @@ void menuTitulares()
             op=0;
             break;
         
-        default:
-            printf("\n Opcion incorrecta. \n");
-            break;
         }
     } while (op!=0);    
 }
@@ -65,7 +82,8 @@ void menuAutomotores()
     int op=1;
     do
     {
-        printf("\n\n1) Alta automotor.\n");
+        printf("\n\n---- MENU AUTOMOTORES ----\n\n");
+        printf("1) Alta automotor.\n");
         printf("2) Baja automotor.\n");
         printf("3) Transferir vehiculo.\n");
         printf("4) Buscar con dominio.\n");
@@ -111,9 +129,6 @@ void menuAutomotores()
             op=0;
             break;
         
-        default:
-            printf("\n Opcion incorrecta. \n");
-            break;
         }
     } while (op!=0);
 }
@@ -123,7 +138,8 @@ void menuReportes()
     int op=1;
     do
     {
-        printf("\n\n1) Listar vehiculos por registro.\n");
+        printf("\n\n---- MENU REPORTES ----\n\n");
+        printf("1) Listar vehiculos por registro.\n");
         printf("2) Reporte cantidad de vehiculos registrados.\n");
         printf("0) Volver.\n");
         op = pedirOpcion(0,3);
@@ -141,9 +157,6 @@ void menuReportes()
             op=0;
             break;
         
-        default:
-            printf("\n Opcion incorrecta. \n");
-            break;
         }
     } while (op!=0);
 }

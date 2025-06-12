@@ -8,24 +8,31 @@ void limpiarSaltoLinea(char *str) {
     str[strcspn(str, "\n")] = '\0';
 }
 
+
 void leerCadena(char *buffer, int tam) {
+
+    fflush(stdin);  
+    
+
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF && c != ' ' && c != '\t') {
+        ungetc(c, stdin); 
+        break;
+    }
+    
     if (fgets(buffer, tam, stdin)) {
         size_t len = strlen(buffer);
-        // Si fgets no quitó el salto de línea, lo eliminamos
         if (len > 0 && buffer[len - 1] == '\n') {
             buffer[len - 1] = '\0';
         } else {
-            // Si no hubo '\n', limpiar caracteres restantes del buffer
-            int c;
             while ((c = getchar()) != '\n' && c != EOF);
         }
     } else {
-        // Si fgets falla, limpiar stdin
-        int c;
         while ((c = getchar()) != '\n' && c != EOF);
         buffer[0] = '\0';
     }
 }
+
 
 
 int esEntero(const char *str) {
@@ -47,17 +54,23 @@ int esLong(const char *str) {
 
     strtol(str, &endptr, 10);
 
-    // endptr debe apuntar al final si es un número válido
     return *endptr == '\0';
 }
-
 
 int leerEnteroValidado(const char *mensaje, int *resultado) {
     char buffer[100];
 
     while (1) {
         printf("%s", mensaje);
+        fflush(stdout);  // IMPORTANTE: Forzar que se muestre el mensaje
+        
         leerCadena(buffer, sizeof(buffer));
+
+        // Verificar si el buffer está vacío (posible lectura automática)
+        if (strlen(buffer) == 0) {
+            printf("No se detecto entrada. Intenta de nuevo.\n");
+            continue;
+        }
 
         if (esEntero(buffer)) {
             *resultado = atoi(buffer);
@@ -68,13 +81,20 @@ int leerEnteroValidado(const char *mensaje, int *resultado) {
     }
 }
 
-
 int leerLongValidado(const char *mensaje, long *resultado) {
     char buffer[100];
 
     while (1) {
         printf("%s", mensaje);
+        fflush(stdout);  // IMPORTANTE: Forzar que se muestre el mensaje
+        
         leerCadena(buffer, sizeof(buffer));
+
+        // Verificar si el buffer está vacío
+        if (strlen(buffer) == 0) {
+            printf("No se detecto entrada. Intenta de nuevo.\n");
+            continue;
+        }
 
         if (esLong(buffer)) {
             *resultado = strtol(buffer, NULL, 10);
@@ -84,7 +104,6 @@ int leerLongValidado(const char *mensaje, long *resultado) {
         printf("Entrada invalida. Ingresa un numero long valido.\n");
     }
 }
-
 
 enum CodigoFecha {
     FECHA_OK = 0,
@@ -135,7 +154,6 @@ int validarFecha(const char *fecha, int *codigoError) {
         return 0;
     }
 
-    // Validar cantidad de días según el mes
     if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
         *codigoError = DIA_EXCEDE_MAXIMO;
         return 0;
@@ -159,7 +177,15 @@ int leerFechaValidada(const char *mensaje, char *buffer, int tam) {
 
     while (1) {
         printf("%s", mensaje);
+        fflush(stdout);  // IMPORTANTE: Forzar que se muestre el mensaje
+        
         leerCadena(buffer, tam);
+
+        // Verificar si el buffer está vacío
+        if (strlen(buffer) == 0) {
+            printf("No se detecto entrada. Intenta de nuevo.\n");
+            continue;
+        }
 
         if (validarFecha(buffer, &error)) {
             return 1;

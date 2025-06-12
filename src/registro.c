@@ -98,6 +98,8 @@ int seleccionarRegistro() {
         printf("\nSeleccione el ID del registro: ");
         scanf("%d", &idSel);
 
+        
+
         rewind(fr);
         encontrado = 0;
         int idRegistroAux, idDomicilioAux;
@@ -183,7 +185,8 @@ void buscarVehiculosPorRegistro() {
     Automotor a;
     int encontrado = 0;
 
-    printf("Vehiculos en el registro %d:\n", idBusqueda);
+
+    printf("\nVehiculos en el registro %d:\n", idBusqueda);
     printf("Dominio    | Marca               | Modelo              | Anioo| Tipo Uso\n");
     printf("-----------------------------------------------------------------------\n");
 
