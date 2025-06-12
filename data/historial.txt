@@ -1,5 +1,5 @@
 1;PMV745;Multa;Exceso de velocidad;20/05/2021
-2;ABC123;Accidente;Colisión leve trasera;10/08/2022
-3;XYZ789;Verificación Técnica;Aprobada sin observaciones;15/02/2023
-4;QWE321;Robo;Sustraído espejo lateral;01/01/2021
+2;ABC123;Accidente;Colision leve trasera;10/08/2022
+3;XYZ789;Verificación Tecnica;Aprobada sin observaciones;15/02/2023
+4;QWE321;Robo;Sustraido espejo lateral;01/01/2021
 5;MNB987;Multa;Estacionamiento indebido;18/03/2023
