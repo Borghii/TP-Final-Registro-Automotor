@@ -255,9 +255,14 @@ void consultarInformacionConDominio(){
 
     do
     {
-        printf("Ingrese el dominio del automotor a consultar informacion: \n");
+        printf("\nIngrese el dominio del automotor a consultar informacion: ");
         fgets(dominio, sizeof(dominio), stdin);
         dominio[strcspn(dominio, "\n")] = '\0';
+
+        if (dominioAutomotorExiste(dominio) == 0) {
+            printf("\nEl dominio ingresado no existe. Intente nuevamente.\n");
+            listarTodos();
+        }
 
     } while (!dominioAutomotorExiste(dominio));
 
@@ -344,6 +349,8 @@ void transferirVehiculo() {
 
         fgets(dominio, sizeof(dominio), stdin);
         dominio[strcspn(dominio, "\n")] = '\0';
+
+
     if (!dominioAutomotorExiste(dominio)) {
         printf("El dominio ingresado no existe.\n");
         return;
