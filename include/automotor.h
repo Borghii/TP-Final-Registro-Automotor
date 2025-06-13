@@ -4,8 +4,7 @@
 
 typedef struct
 {
-    int idVehiculo; //[PK]
-    char dominio [10]; // Patente tipo vieja: 7 caracteres (PMV 745). 
+    char dominio [10]; // [PK] Patente tipo vieja: 7 caracteres (PMV 745). 
     char marca [20]; // Marca: Volkswagen.
     char modelo [20]; // Modelo: Vento.
     char chasis [20]; // Numero de chasis: 17 caracteres (3VWRD61K98M135658).
@@ -18,13 +17,19 @@ typedef struct
     int nroRegistro; //[FK] de registro
 }Automotor;
 
+// Funciones Principales
+
 void altaAutomotor();
-int idVehiculoExiste(int idBuscado);
-int dominioAutomorExiste(const char dominio[10]);
 void listarTodos();
-void listarVehiculoConDominio(const char dominio[10]);
-void bajaAutomotor();
-void listarVehiculosConID();
 void consultarInformacionConDominio();
+void transferirVehiculo();
+void bajaAutomotor();
+
+
+//Auxiliares
+
+int dominioAutomotorExiste(const char dominio[10]);
+void listarVehiculoConDominio(const char dominio[10]);
+int leerRegistroAutomotor(FILE *archivo, Automotor *automotor);
 
 #endif

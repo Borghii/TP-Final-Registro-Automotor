@@ -8,9 +8,14 @@ typedef struct
 }Registro;
 
 
-int existenRegistros();
+// Funciones principales
 void altaRegistro();
 void listarRegistros();
+void reporteRegistrosCantidadAutos();
+void buscarVehiculosPorRegistro();
+
+// Auxiliar
 int seleccionarRegistro();
+int existenRegistros();
 
 #endif

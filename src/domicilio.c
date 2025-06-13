@@ -3,9 +3,10 @@
 #include <string.h>
 #include <time.h>
 #include "domicilio.h"  
+#include "utils.h"
 
 int existeIdDomicilio(int idBuscado) {
-    FILE *archivo = fopen("domicilios.txt", "r");
+    FILE *archivo = fopen("data/domicilios.txt", "r");
     if (!archivo) return 0; // Si no existe el archivo, entonces no hay conflicto
 
     int id;
@@ -22,7 +23,8 @@ int existeIdDomicilio(int idBuscado) {
 
 
 int crearDomicilio() {
-    FILE *archivo = fopen("domicilios.txt", "a+");
+    srand(time(NULL));
+    FILE *archivo = fopen("data/domicilios.txt", "a+");
     if (!archivo) {
         printf("Error al abrir el archivo de domicilios.\n");
         return -1;
@@ -43,16 +45,13 @@ int crearDomicilio() {
     fgets(nuevo.provincia, sizeof(nuevo.provincia), stdin);
     nuevo.provincia[strcspn(nuevo.provincia, "\n")] = '\0';
 
-    printf("Ingrese codigo postal: ");
-    scanf("%d", &nuevo.codigoPostal);
-    getchar();
+    leerEnteroValidado("Ingrese codigo postal: ", &nuevo.codigoPostal);
 
     printf("Ingrese calle: ");
     fgets(nuevo.calle, sizeof(nuevo.calle), stdin);
     nuevo.calle[strcspn(nuevo.calle, "\n")] = '\0';
 
-    printf("Ingrese numero: ");
-    scanf("%d", &nuevo.numero);
+    leerEnteroValidado("Ingrese numero de calle: ", &nuevo.numero);
 
     fprintf(archivo, "%d;%s;%s;%d;%s;%d\n",
             nuevo.idDomicilio, nuevo.ciudad, nuevo.provincia,

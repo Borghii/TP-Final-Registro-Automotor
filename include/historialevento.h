@@ -9,9 +9,12 @@ typedef struct {
     char fecha[15];
 } HistorialEvento;
 
-
+//Funciones Principales
 void altaEvento();
 void verHistorialEvento();
+
+//Funciones Auxiliares
+int leerRegistroHistorialEvento(FILE *archivo, HistorialEvento *evento);
 
 
 #endif

@@ -2,9 +2,10 @@
 #include <string.h>
 #include "automotor.h"
 #include "historialevento.h"
+#include "utils.h"
 
 void altaEvento(){
-    FILE *fe = fopen("historial.txt", "a");
+    FILE *fe = fopen("data/historial.txt", "a");
     if (!fe) {
         printf("Error al abrir el archivo de historial.\n");
         return;
@@ -13,17 +14,18 @@ void altaEvento(){
     HistorialEvento e;
 
     // Mostrar vehiculos
-    listarVehiculosConID();
+    listarTodos();
 
      // Validar dominio ingresado
     do {
         printf("Ingrese DOMINIO del vehiculo: ");
-        scanf("%9s", e.dominioAutomotor);
-        if (!dominioExiste(e.dominioAutomotor)) {
-            printf("Dominio inválido. Intente de nuevo.\n");
+        fgets(e.dominioAutomotor, sizeof(e.dominioAutomotor), stdin);
+        e.dominioAutomotor[strcspn(e.dominioAutomotor, "\n")] = '\0'; 
+        if (!dominioAutomotorExiste(e.dominioAutomotor)) {
+            printf("Dominio invalido. Intente de nuevo.\n");
         }
-    } while (!dominioExiste(e.dominioAutomotor));
-    getchar(); // limpiar buffer
+    } while (!dominioAutomotorExiste(e.dominioAutomotor));
+    
 
     printf("Ingrese tipo de evento (Multa, Accidente, etc): ");
     fgets(e.tipoEvento, sizeof(e.tipoEvento), stdin);
@@ -33,16 +35,15 @@ void altaEvento(){
     fgets(e.descripcion, sizeof(e.descripcion), stdin);
     e.descripcion[strcspn(e.descripcion, "\n")] = '\0';
 
-    printf("Ingrese fecha (dd/mm/aaaa): ");
-    fgets(e.fecha, sizeof(e.fecha), stdin);
-    e.fecha[strcspn(e.fecha, "\n")] = '\0';
+
+    leerFechaValidada("Ingrese fecha (dd/mm/aaaa): ", e.fecha, sizeof(e.fecha));
 
     // Generar idEvento automaticamente
-    FILE *fr = fopen("historial.txt", "r");
+    FILE *fr = fopen("data/historial.txt", "r");
     int ultimoID = 0;
     if (fr) {
         HistorialEvento temp;
-        while (fscanf(fr, "%d;%*d;%*[^;];%*[^;];%*s\n", &temp.idEvento) == 1) {
+        while (fscanf(fr, "%d;%9[^;];%14[^;];%49[^;];%14s\n", &temp.idEvento, temp.dominioAutomotor, temp.tipoEvento, temp.descripcion, temp.fecha) == 5){
             ultimoID = temp.idEvento;
         }
         fclose(fr);
@@ -59,7 +60,7 @@ void altaEvento(){
 
 
 void verHistorialEvento(){
-    FILE *fe = fopen("historial.txt", "r");
+    FILE *fe = fopen("data/historial.txt", "r");
     if (!fe) {
         printf("No se pudo abrir el archivo de historial.\n");
         return;
@@ -67,14 +68,16 @@ void verHistorialEvento(){
 
     char dominio[10];
     do {
-        printf("Ingrese DOMINIO del vehiculo para ver su historial: ");
-        scanf("%9s", dominio);
-        if (!dominioExiste(dominio)) {
-            printf("Dominio inválido. Intente de nuevo.\n");
+        printf("Ingrese el DOMINIO del vehiculo para ver su historial: ");
+        fgets(dominio, sizeof(dominio), stdin);
+        dominio[strcspn(dominio, "\n")] = '\0';
+        if (!dominioAutomotorExiste(dominio)) {
+            printf("Dominio invalido. Intente de nuevo.\n");
+            listarTodos();
+            printf("\n");
         }
-    } while (!dominioExiste(dominio));
-    getchar(); // limpiar buffer
-
+    } while (!dominioAutomotorExiste(dominio));
+    
     HistorialEvento e;
     int encontrado = 0;
 
@@ -85,7 +88,7 @@ void verHistorialEvento(){
                 printf("\n--- Historial del Vehiculo Dominio %s ---\n", dominio);
                 encontrado = 1;
             }
-            printf("ID Evento: %d\nTipo: %s\nDescripcion: %s\nFecha: %s\n\n",
+            printf("ID Evento: %d  |  Tipo: %s  |  Descripcion: %s  |  Fecha: %s\n",
                    e.idEvento, e.tipoEvento, e.descripcion, e.fecha);
         }
     }
@@ -95,4 +98,14 @@ void verHistorialEvento(){
     }
 
     fclose(fe);
+}
+
+
+int leerRegistroHistorialEvento(FILE *archivo, HistorialEvento *evento) {
+    return fscanf(archivo, "%d;%9[^;];%14[^;];%49[^;];%14[^\n]\n",
+                  &evento->idEvento,
+                  evento->dominioAutomotor,
+                  evento->tipoEvento,
+                  evento->descripcion,
+                  evento->fecha) == 5;
 }

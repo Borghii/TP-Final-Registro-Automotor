@@ -3,39 +3,36 @@
 #include "titular.h"
 #include "automotor.h"
 #include "domicilio.h"
+#include "utils.h"
 
 void altaTitular() {
-    FILE *archivo = fopen("titulares.txt", "a");
+    FILE *archivo = fopen("data/titulares.txt", "a");
     if (archivo == NULL) {
         printf("Error al abrir el archivo de titulares.\n");
         return;
     }
 
     Titular nuevo;
-    getchar(); // limpia el '\n' que queda en el buffer
     printf("Ingrese nombre: ");
     fgets(nuevo.nombre, sizeof(nuevo.nombre), stdin);
     nuevo.nombre[strcspn(nuevo.nombre, "\n")] = '\0';
 
-    printf("Ingrese CUIT: ");
-    scanf("%d", &nuevo.cuit);
-    getchar(); // limpia el '\n' que queda en el buffer
+    leerLongValidado("Ingrese CUIT: ", &nuevo.cuit);
 
     printf("Ingrese tipo de documento (DNI, LC, LE, etc): ");
     fgets(nuevo.tipoDocumento, sizeof(nuevo.tipoDocumento), stdin);
     nuevo.tipoDocumento[strcspn(nuevo.tipoDocumento, "\n")] = '\0';
 
-    printf("Ingrese numero de documento: ");
-    scanf("%d", &nuevo.nroDocumento);
-    getchar(); // limpia el '\n' que queda en el buffer
+    do {
+         leerEnteroValidado("Ingrese numero de documento: ", &nuevo.nroDocumento);
+    } while (titularExiste(nuevo.nroDocumento));
 
-    printf("Ingrese fecha de nacimiento (dd/mm/aaaa): ");
-    fgets(nuevo.fechaNacimiento, sizeof(nuevo.fechaNacimiento), stdin);
-    nuevo.fechaNacimiento[strcspn(nuevo.fechaNacimiento, "\n")] = '\0';
+    leerFechaValidada("Ingrese fecha de nacimiento (dd/mm/aaaa): ", nuevo.fechaNacimiento, sizeof(nuevo.fechaNacimiento));
+
 
     nuevo.idDomicilio = crearDomicilio(); 
 
-    fprintf(archivo, "%s;%d;%s;%d;%s;%d\n",
+    fprintf(archivo, "%s;%ld;%s;%d;%s;%d\n",
         nuevo.nombre,
         nuevo.cuit,
         nuevo.tipoDocumento,
@@ -49,9 +46,9 @@ void altaTitular() {
 }
 
 void listarTitularesConVehiculos() {
-    FILE *ft = fopen("titulares.txt", "r");
-    FILE *fa = fopen("automotores.txt", "r");
-    FILE *fd = fopen("domicilios.txt", "r");
+    FILE *ft = fopen("data/titulares.txt", "r");
+    FILE *fa = fopen("data/automotores.txt", "r");
+    FILE *fd = fopen("data/domicilios.txt", "r");
 
     if (!ft || !fa || !fd) {
         printf("Error al abrir archivos.\n");
@@ -62,14 +59,14 @@ void listarTitularesConVehiculos() {
     Automotor a;
     Domicilio d;
 
-    while (fscanf(ft, "%[^;];%d;%[^;];%d;%[^;];%d\n",
+    while (fscanf(ft, "%[^;];%ld;%[^;];%d;%[^;];%d\n",
                   t.nombre, &t.cuit, t.tipoDocumento,
                   &t.nroDocumento, t.fechaNacimiento,
                   &t.idDomicilio) == 6) {
 
         printf("\n--- Titular ---\n");
         printf("Nombre: %s\n", t.nombre);
-        printf("CUIT: %d\n", t.cuit);
+        printf("CUIT: %ld\n", t.cuit);
         printf("Tipo de Documento: %s\n", t.tipoDocumento);
         printf("Numero de Documento: %d\n", t.nroDocumento);
         printf("Fecha de Nacimiento: %s\n", t.fechaNacimiento);
@@ -95,10 +92,10 @@ void listarTitularesConVehiculos() {
         rewind(fa);
         int tieneAutos = 0;
 
-        while (fscanf(fa, "%d;%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d\n",
-                      &a.idVehiculo, a.dominio, a.marca, a.modelo, a.chasis, a.motor,
+        while (fscanf(fa, "%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%[^;];%d;%d;%d\n",
+                    a.dominio, a.marca, a.modelo, a.chasis, a.motor,
                       &a.anioFabricacion, a.paisOrigen, a.tipoUso, &a.peso,
-                      &a.nroDocTitular) == 11) {
+                      &a.nroDocTitular,&a.nroRegistro ) == 11) {
 
             if (a.nroDocTitular == t.nroDocumento) {
                 if (!tieneAutos) {
@@ -123,13 +120,13 @@ void listarTitularesConVehiculos() {
 }
 
 int titularExiste(int dni) {
-    FILE *archivo = fopen("titulares.txt", "r");
+    FILE *archivo = fopen("data/titulares.txt", "r");
     if (archivo == NULL) return 0;
 
     Titular t;
     int existe = 0;
 
-    while (fscanf(archivo, "%[^;];%d;%[^;];%d;%[^;];%d\n",
+    while (fscanf(archivo, "%[^;];%ld;%[^;];%d;%[^;];%d\n",
                   t.nombre,
                   &t.cuit,
                   t.tipoDocumento,

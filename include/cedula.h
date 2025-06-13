@@ -11,7 +11,12 @@ typedef struct
     char dominioAutomotor[20];  // [FK] dominio de automotor
 }Cedula;
 
-
+//Funcines principales
 void altaCedula();
+
+//Funciones auxiliares
+int leerRegistroCedula(FILE *archivo, Cedula *cedula);
+int cedulaExiste(int nroCedula);
+
 
 #endif

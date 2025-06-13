@@ -1,6 +1,0 @@
-1;6500;Multa;Exceso de velocidad por panamericana;23/05/2020
-2;2;m;we;1212sad
-3;6500;Pete;Lo encontraron haciendo un pete;02/06/2025
-4;6500;Accidente;choco de frente;231234
-5;6500;Baja total;Baja total por choque;999
-6;6500;Multa;estaciono mal;1231241

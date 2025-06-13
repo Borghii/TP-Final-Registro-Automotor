@@ -1,2 +1,0 @@
-41;;bsas;2900;reynoso;407
-8467;san nicolas;bsas;2900;reynoso;407
